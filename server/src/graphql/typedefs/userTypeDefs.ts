@@ -37,6 +37,7 @@ export const userTypeDefs = gql`
     login(input: LoginUserInput!): Auth
 
     addToSeen(movieID: ID!): User
-    removeFromSeen(movieID: ID!): User
+    addToWatchList(movieID: ID!): User
+    removeFromUser(movieID: ID!): User
   }
 `;

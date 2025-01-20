@@ -9,14 +9,16 @@ import { QUERY_USER_MOVIE_DATA } from "../utils/queries/userQueries.js";
 import { SAVE_MOVIE_TO_DB } from "../utils/mutations/movieMutations";
 import {
   ADD_TO_SEEN,
-  REMOVE_FROM_SEEN,
+  ADD_TO_WATCHLIST,
+  REMOVE_FROM_USER,
 } from "../utils/mutations/userMutations";
 
 const Movie = () => {
   const idParams = useParams<{ id: string }>();
   const [saveMovieToDB] = useMutation(SAVE_MOVIE_TO_DB);
   const [addToSeen] = useMutation(ADD_TO_SEEN);
-  const [removeFromSeen] = useMutation(REMOVE_FROM_SEEN);
+  const [addToWatchList] = useMutation(ADD_TO_WATCHLIST);
+  const [removeFromUser] = useMutation(REMOVE_FROM_USER);
   const [pageMovie, setPageMovie] = useState<Movie | null>(null);
 
   const fetchAPIData = async () => {
@@ -63,29 +65,39 @@ const Movie = () => {
           },
         },
       });
-      console.log("saveMovie() Output: ", movieData);
       return movieData;
     } catch (error: any) {
       console.error("Error saving movie:", error);
     }
   };
 
-  const handleSaveButton = async () => {
+  const handleSeenButton = async () => {
     try {
       const movieData = await saveMovie();
       await addToSeen({
         variables: { movieID: movieData?.data.saveMovieToDB._id },
       });
       refetch();
-      console.log("handleSaveButton() Output:", movieData);
     } catch (error: any) {
+      console.error("Error saving movie:", error);
+    }
+  };
+
+  const handleWatchListButton = async () => {
+    try {
+      const movieData = await saveMovie();
+      await addToWatchList({
+        variables: { movieID: movieData?.data.saveMovieToDB._id },
+      });
+      refetch();
+    } catch (error) {
       console.error("Error saving movie:", error);
     }
   };
 
   const handleRemoveButton = async () => {
     try {
-      await removeFromSeen({ variables: { movieID: dbMovie?.movie._id } });
+      await removeFromUser({ variables: { movieID: dbMovie?.movie._id } });
       refetch();
     } catch (error: any) {
       console.error("Error removing movie:", error);
@@ -105,14 +117,28 @@ const Movie = () => {
   return (
     <div>
       <div>
-        {userMovieData? (
+        {userMovieData ? (
           userMovieData.userMovieData?.status === "SEEN" ? (
-            <button onClick={() => handleRemoveButton()}>Mark Unseen</button>
+            <div>
+              <button onClick={() => handleRemoveButton()}>Mark Unseen</button>
+              <button onClick={() => handleWatchListButton()}>Add to Watchlist</button>
+            </div>
+          ) : userMovieData.userMovieData?.status === "WATCH_LIST" ? (
+            <div>
+              <button onClick={() => handleSeenButton()}>Mark Seen</button>
+              <button onClick={() => handleRemoveButton()}>Remove From WatchList</button>
+            </div>
           ) : (
-            <button onClick={() => handleSaveButton()}>Mark Seen</button>
+            <div>
+            <button onClick={() => handleSeenButton()}>Mark Seen</button>
+            <button onClick={() => handleWatchListButton()}>Add to Watchlist</button>
+          </div>
           )
         ) : (
-          <button onClick={() => handleSaveButton()}>Mark Seen</button>
+          <div>
+            <button onClick={() => handleSeenButton()}>Mark Seen</button>
+            <button onClick={() => handleWatchListButton()}>Add to Watchlist</button>
+          </div>
         )}
       </div>
       <h1>{pageMovie?.Title}</h1>

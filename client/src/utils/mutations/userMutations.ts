@@ -44,9 +44,27 @@ export const ADD_TO_SEEN = gql`
     }
 `;
 
-export const REMOVE_FROM_SEEN = gql`
-    mutation removeFromSeen($movieID: ID!) {
-        removeFromSeen(movieID: $movieID) {
+export const ADD_TO_WATCHLIST = gql`
+    mutation addToWatchList($movieID: ID!) {
+        addToWatchList(movieID: $movieID) {
+            _id
+            username
+            email
+            movies {
+                movie {
+                    _id
+                    title
+                    imdbID
+                }
+                status
+            }
+        }
+    }
+`;
+
+export const REMOVE_FROM_USER = gql`
+    mutation removeFromUser($movieID: ID!) {
+        removeFromUser(movieID: $movieID) {
             _id
             username
             email

@@ -31,7 +31,7 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user =  await User.findOne({ _id: context.user._id }).populate(
+        const user = await User.findOne({ _id: context.user._id }).populate(
           "movies.movie"
         );
         console.log("user:", user);
@@ -65,11 +65,13 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const userData = await User.findOne({_id: context.user._id,});
+        const userData = await User.findOne({ _id: context.user._id });
         if (!userData) {
           throw new Error("User movie data not found.");
         }
-        const userMovieData = userData.movies.find((movie) => movie.movie.toString() === movieID);
+        const userMovieData = userData.movies.find(
+          (movie) => movie.movie.toString() === movieID
+        );
         return userMovieData;
       } catch (error) {
         console.error("Error fetching user movie data:", error);
@@ -115,8 +117,23 @@ export const UserResolvers = {
         if (!user) {
           throw new Error("User not found.");
         }
-        const updatedUser = await User.findByIdAndUpdate(
-          user._id,
+        const check = user.movies.find(
+          (movie) => movie.movie.toString() === movieID
+        );
+        if (check) {
+          console.log("Movie already in user's list.");
+          let updatedUser = await User.findByIdAndUpdate(
+            { _id: user._id },
+            {
+              $set: { movies: { movie: movieID, status: "SEEN" } },
+            },
+            { runValidators: true, new: true }
+          );
+          console.log("Updated User:", updatedUser);
+          return updatedUser;
+        };
+        let updatedUser = await User.findByIdAndUpdate(
+          { _id: user._id },
           {
             $push: { movies: { movie: movieID, status: "SEEN" } },
           },
@@ -128,7 +145,48 @@ export const UserResolvers = {
         throw new Error("Could not add movie to user.");
       }
     },
-    removeFromSeen: async (
+    addToWatchList: async (
+      _parent: any,
+      { movieID }: { movieID: string },
+      context: IApolloContext
+    ) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const user = await User.findOne({ _id: context.user._id });
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        const check = user.movies.find(
+          (movie) => movie.movie.toString() === movieID
+        );
+        if (check) {
+          console.log("Movie already in user's list.");
+          let updatedUser = await User.findByIdAndUpdate(
+            { _id: user._id },
+            {
+              $set: { movies: { movie: movieID, status: "WATCH_LIST" } },
+            },
+            { runValidators: true, new: true }
+          );
+          console.log("Updated User:", updatedUser);
+          return updatedUser;
+        };
+        let updatedUser = await User.findByIdAndUpdate(
+          { _id: user._id },
+          {
+            $push: { movies: { movie: movieID, status: "WATCH_LIST" } },
+          },
+          { runValidators: true, new: true }
+        );
+        return updatedUser;
+      } catch (error) {
+        console.error("Error adding movie to user:", error);
+        throw new Error("Could not add movie to user.");
+      }
+    },
+    removeFromUser: async (
       _parent: any,
       { movieID }: { movieID: string },
       context: IApolloContext
