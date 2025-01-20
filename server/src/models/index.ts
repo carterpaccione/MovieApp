@@ -1,6 +1,5 @@
 import User from './User.js';
-import List from './List.js';
 
-const Models = [User, List];
+const Models = [User];
 
 export default Models;

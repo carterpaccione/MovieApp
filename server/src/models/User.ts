@@ -1,6 +1,6 @@
 import { Schema, model, type Document } from "mongoose";
 import bcrypt from "bcrypt";
-import { IList } from './List.js';
+import { IUserMovie, userMovieSchema } from './UserMovie.js'
 
 export interface IUser extends Document {
   _id: string;
@@ -9,7 +9,7 @@ export interface IUser extends Document {
   password: string;
   isCorrectPassword(password: string): Promise<boolean>;
   
-  lists?: IList[];
+  movies: IUserMovie[]
   friends?: IUser[];
   createdAt: Date;
 }
@@ -33,14 +33,7 @@ export const userSchema: Schema<IUser> = new Schema({
     required: true,
     minlength: 8,
   },
-  lists: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "List"
-      },
-    ],
-  },
+  movies: [userMovieSchema],
   friends: [
     {
       type: Schema.Types.ObjectId,

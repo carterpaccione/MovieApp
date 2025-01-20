@@ -25,3 +25,39 @@ export const LOGIN = gql`
         }
     }
 `;
+
+export const ADD_TO_SEEN = gql`
+    mutation addToSeen($movieID: ID!) {
+        addToSeen(movieID: $movieID) {
+            _id
+            username
+            email
+            movies {
+                movie {
+                    _id
+                    title
+                    imdbID
+                }
+                status
+            }
+        }
+    }
+`;
+
+export const REMOVE_FROM_SEEN = gql`
+    mutation removeFromSeen($movieID: ID!) {
+        removeFromSeen(movieID: $movieID) {
+            _id
+            username
+            email
+            movies {
+                movie {
+                    _id
+                    title
+                    imdbID
+                }
+                status
+            }
+        }
+    }
+`;

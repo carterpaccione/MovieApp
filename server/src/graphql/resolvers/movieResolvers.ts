@@ -10,7 +10,7 @@ interface saveMovieToDBInput {
 
 export const MovieResolvers = {
   Query: {
-    movie: async (_parent: any, imdbID: string) => {
+    movie: async (_parent: any, { imdbID }: { imdbID: string}) => {
       try {
         const movie = await Movie.findOne({ imdbID: imdbID });
         if (!movie) {

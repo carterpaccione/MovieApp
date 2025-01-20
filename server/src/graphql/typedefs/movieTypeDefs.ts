@@ -23,6 +23,5 @@ export const movieTypeDefs = gql`
 
     type Mutation {
         saveMovieToDB(input: SaveMovieToDBInput!): Movie
-        rateMovie(movieID: ID!, rating: Float!, review: String): Movie
     }
 `;

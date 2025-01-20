@@ -4,7 +4,6 @@ import {
   IApolloContext,
 } from "../../utils/auth.js";
 import User from "../../models/User.js";
-import List from "../../models/List.js";
 
 interface NewUserInput {
   input: {
@@ -21,6 +20,10 @@ interface LoginUserInput {
   };
 }
 
+interface UserMovieArgs {
+  movieID: string;
+}
+
 export const UserResolvers = {
   Query: {
     me: async (_parent: any, _args: any, context: IApolloContext) => {
@@ -28,18 +31,11 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        return await User.findOne({ _id: context.user._id }).populate([
-          {
-            path: "lists",
-            select: "name _id",
-            populate: [
-              {
-                path: "movies",
-                select: "title _id imdbID poster",
-              },
-            ]
-          }
-        ]);
+        const user =  await User.findOne({ _id: context.user._id }).populate(
+          "movies.movie"
+        );
+        console.log("user:", user);
+        return user;
       } catch (error) {
         console.error("Error fetching user:", error);
         throw new Error("Could not fetch user.");
@@ -60,20 +56,24 @@ export const UserResolvers = {
         throw new Error("Could not fetch user.");
       }
     },
-    seenList: async (_parent: any, _args: any, context: IApolloContext) => {
+    userMovieData: async (
+      _parent: any,
+      { movieID }: UserMovieArgs,
+      context: IApolloContext
+    ) => {
       if (!context.user) {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const userData = await User.findOne({ _id: context.user._id });
+        const userData = await User.findOne({_id: context.user._id,});
         if (!userData) {
-          throw new Error("User not found.");
+          throw new Error("User movie data not found.");
         }
-        const seenList = await List.findOne({ owner: userData._id, name: "Seen" }).populate("owner").populate("movies");
-        return seenList;
+        const userMovieData = userData.movies.find((movie) => movie.movie.toString() === movieID);
+        return userMovieData;
       } catch (error) {
-        console.error("Error fetching list:", error);
-        throw new Error("Could not fetch list.");
+        console.error("Error fetching user movie data:", error);
+        throw new Error("Could not fetch user movie data.");
       }
     },
   },
@@ -82,10 +82,6 @@ export const UserResolvers = {
       try {
         const user = await User.create({ ...input });
         const token = signToken(user.username, user.email, user._id);
-        const seenList = await List.create({ name: "Seen", owner: user._id });
-        const watchList = await List.create({ name: "WatchList", owner: user._id });
-        await User.findByIdAndUpdate(user._id, { $addToSet: { lists: seenList._id } });
-        await User.findByIdAndUpdate(user._id, { $addToSet: { lists: watchList._id } });
         return { token, user };
       } catch (error) {
         console.error("Error creating user:", error);
@@ -105,6 +101,58 @@ export const UserResolvers = {
 
       const token = signToken(user.username, user.email, user._id);
       return { token, user };
+    },
+    addToSeen: async (
+      _parent: any,
+      { movieID }: { movieID: string },
+      context: IApolloContext
+    ) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const user = await User.findOne({ _id: context.user._id });
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        const updatedUser = await User.findByIdAndUpdate(
+          user._id,
+          {
+            $push: { movies: { movie: movieID, status: "SEEN" } },
+          },
+          { runValidators: true, new: true }
+        );
+        return updatedUser;
+      } catch (error) {
+        console.error("Error adding movie to user:", error);
+        throw new Error("Could not add movie to user.");
+      }
+    },
+    removeFromSeen: async (
+      _parent: any,
+      { movieID }: { movieID: string },
+      context: IApolloContext
+    ) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const user = await User.findOne({ _id: context.user._id });
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        await User.findByIdAndUpdate(
+          user._id,
+          {
+            $pull: { movies: { movie: movieID } },
+          },
+          { runValidators: true, new: true }
+        );
+        return user;
+      } catch (error) {
+        console.error("Error removing movie from user:", error);
+        throw new Error("Could not remove movie from user.");
+      }
     },
   },
 };

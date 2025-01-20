@@ -6,33 +6,28 @@ export const QUERY_ME = gql`
       _id
       username
       email
-      lists {
-        _id
-        name
-        movies {
+      movies {
+        movie {
           _id
-          imdbID
           title
+          imdbID
           poster
         }
+        status
       }
     }
   }
 `;
 
-export const QUERY_USER_SEEN_LIST = gql`
-  query seenList {
-    seenList {
-      _id
-      name
-      owner {
-        _id
-      }
-      movies {
+export const QUERY_USER_MOVIE_DATA = gql`
+  query userMovieData($movieID: ID!) {
+    userMovieData(movieID: $movieID) {
+      movie {
         _id
         title
         imdbID
       }
+      status
     }
   }
 `;

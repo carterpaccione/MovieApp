@@ -1,34 +1,23 @@
 import { useParams } from "react-router-dom";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 
-import type { Movie } from "../models/Movie.js";
-import { QUERY_USER_LIST_DATA } from "../utils/queries/listQueries";
-import {
-  ADD_MOVIE_TO_LIST,
-  REMOVE_MOVIE_FROM_LIST,
-} from "../utils/mutations/listMutations";
+import type { Movie, IMovie } from "../models/Movie.js";
+import type { IUserMovie } from "../models/UserMovie.js";
+import { QUERY_MOVIE } from "../utils/queries/movieQueries.js";
+import { QUERY_USER_MOVIE_DATA } from "../utils/queries/userQueries.js";
 import { SAVE_MOVIE_TO_DB } from "../utils/mutations/movieMutations";
+import {
+  ADD_TO_SEEN,
+  REMOVE_FROM_SEEN,
+} from "../utils/mutations/userMutations";
 
 const Movie = () => {
   const idParams = useParams<{ id: string }>();
-  const [addMovieToList] = useMutation(ADD_MOVIE_TO_LIST);
-  const [removeMovieFromList] = useMutation(REMOVE_MOVIE_FROM_LIST);
   const [saveMovieToDB] = useMutation(SAVE_MOVIE_TO_DB);
+  const [addToSeen] = useMutation(ADD_TO_SEEN);
+  const [removeFromSeen] = useMutation(REMOVE_FROM_SEEN);
   const [pageMovie, setPageMovie] = useState<Movie | null>(null);
-
-  const {
-    data: userListData,
-    loading,
-    error,
-    refetch,
-  } = useQuery(QUERY_USER_LIST_DATA);
-
-  const seenList = userListData?.userListData[0]?.movies || [];
-  const watchList = userListData?.userListData[1]?.movies || [];
-
-  const isInSeenList = useMemo(() => isMovieInList(seenList, idParams.id), [seenList, idParams.id]);
-  const isInWatchList = useMemo(() => isMovieInList(watchList, idParams.id), [watchList, idParams.id]);
 
   const fetchAPIData = async () => {
     if (idParams.id) {
@@ -47,13 +36,21 @@ const Movie = () => {
     }
   };
 
-  const isMovieInList = (list: any[], id: any) => {
-    return list.some((movie) => movie.imdbID === id);
-  };
-
   useEffect(() => {
     fetchAPIData();
   }, []);
+
+  const { data: dbMovie } = useQuery<{ movie: IMovie }>(QUERY_MOVIE, {
+    variables: { imdbID: idParams.id },
+  });
+  const {
+    data: userMovieData,
+    loading,
+    error,
+    refetch,
+  } = useQuery<{ userMovieData: IUserMovie }>(QUERY_USER_MOVIE_DATA, {
+    variables: { movieID: dbMovie?.movie._id },
+  });
 
   const saveMovie = async () => {
     try {
@@ -73,38 +70,23 @@ const Movie = () => {
     }
   };
 
-  const handleSaveButton = async (listID: string) => {
-    console.log("SAVE ListID: ", listID);
+  const handleSaveButton = async () => {
     try {
       const movieData = await saveMovie();
-      const updatedList = await addMovieToList({
-        variables: {
-          input: {
-            listID: listID,
-            movieID: movieData?.data.saveMovieToDB._id,
-          },
-        },
+      await addToSeen({
+        variables: { movieID: movieData?.data.saveMovieToDB._id },
       });
       refetch();
-      console.log("handleSaveButton() Output:", updatedList);
+      console.log("handleSaveButton() Output:", movieData);
     } catch (error: any) {
       console.error("Error saving movie:", error);
     }
   };
 
-  const handleRemoveFromList = async (listID: string) => {
-    console.log("REMOVE ListID: ", listID);
+  const handleRemoveButton = async () => {
     try {
-      const updatedList = await removeMovieFromList({
-        variables: {
-          input: {
-            listID: listID,
-            imdbID: idParams.id,
-          },
-        },
-      });
+      await removeFromSeen({ variables: { movieID: dbMovie?.movie._id } });
       refetch();
-      console.log("handleRemoveFromSeenList() Output:", updatedList);
     } catch (error: any) {
       console.error("Error removing movie:", error);
     }
@@ -116,39 +98,21 @@ const Movie = () => {
   if (error) {
     console.error("Error fetching User Data:", error);
   }
-  console.log("User Data: ", userListData);
+  console.log("DB Movie: ", dbMovie);
+  console.log("UserMovie Data: ", userMovieData);
   console.log("Movie Data: ", pageMovie);
 
   return (
     <div>
       <div>
-        {isInSeenList ? (
-          <button
-            onClick={() => handleRemoveFromList(userListData.userListData.find((listObject: any) => (
-              listObject.name === "Seen"
-            ))._id)}
-          >
-            - Seen
-          </button>
+        {userMovieData? (
+          userMovieData.userMovieData?.status === "SEEN" ? (
+            <button onClick={() => handleRemoveButton()}>Mark Unseen</button>
+          ) : (
+            <button onClick={() => handleSaveButton()}>Mark Seen</button>
+          )
         ) : (
-          <button
-            onClick={() => handleSaveButton(userListData.userListData[0]._id)}
-          >
-            + Seen
-          </button>
-        )}
-        {isInWatchList ? (
-          <button
-            onClick={() => handleRemoveFromList(userListData.userListData[1]._id)}
-          >
-            - WatchList
-          </button>
-        ) : (
-          <button
-            onClick={() => handleSaveButton(userListData.userListData[1]._id)}
-          >
-            + WatchList
-          </button>
+          <button onClick={() => handleSaveButton()}>Mark Seen</button>
         )}
       </div>
       <h1>{pageMovie?.Title}</h1>
