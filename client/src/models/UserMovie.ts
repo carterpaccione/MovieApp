@@ -1,4 +1,5 @@
 import { IMovie } from "./Movie.js";
+import { IRating } from "./Rating.js";
 
 export enum MovieStatus {
     SEEN = "SEEN",
@@ -8,4 +9,5 @@ export enum MovieStatus {
 export interface IUserMovie {
     movie: IMovie;
     status: MovieStatus;
+    rating: IRating
 }

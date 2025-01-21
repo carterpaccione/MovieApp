@@ -1,5 +1,6 @@
 import { Schema, type Document } from "mongoose";
 import { IMovie } from "./Movie.js";
+import { IRating } from "./Rating.js";
 
 export enum MovieStatus {
   SEEN = "SEEN",
@@ -9,6 +10,7 @@ export enum MovieStatus {
 export interface IUserMovie extends Document {
   movie: IMovie;
   status: MovieStatus;
+  rating?: IRating;
 }
 
 export const userMovieSchema = new Schema<IUserMovie>({
@@ -18,6 +20,7 @@ export const userMovieSchema = new Schema<IUserMovie>({
     enum: Object.values(MovieStatus),
     required: true,
   },
+  rating: { type: Schema.Types.ObjectId, ref: "Rating", default: null },
 });
 
 export default userMovieSchema;

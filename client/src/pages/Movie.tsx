@@ -2,7 +2,10 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 
+import ReviewForm from "../components/reviewForm.js";
+
 import type { Movie, IMovie } from "../models/Movie.js";
+import type { IRating } from "../models/Rating.js";
 import type { IUserMovie } from "../models/UserMovie.js";
 import { QUERY_MOVIE } from "../utils/queries/movieQueries.js";
 import { QUERY_USER_MOVIE_DATA } from "../utils/queries/userQueries.js";
@@ -110,9 +113,6 @@ const Movie = () => {
   if (error) {
     console.error("Error fetching User Data:", error);
   }
-  console.log("DB Movie: ", dbMovie);
-  console.log("UserMovie Data: ", userMovieData);
-  console.log("Movie Data: ", pageMovie);
 
   return (
     <div>
@@ -142,8 +142,14 @@ const Movie = () => {
         )}
       </div>
       <h1>{pageMovie?.Title}</h1>
+      <p>Average Rating: {dbMovie?.movie.averageRating}</p>
       <img src={pageMovie?.Poster} alt={pageMovie?.Title} />
       <p>{pageMovie?.Plot}</p>
+      {dbMovie?.movie._id && <ReviewForm movieID={dbMovie.movie._id} />}
+      <ul>
+        {dbMovie?.movie.ratings.map((rating: IRating) =>
+          <li key={rating._id}> {rating.score} - {rating.review} - {rating.user.username} - {new Date(rating.createdAt).toLocaleDateString()}</li>)}
+      </ul>
     </div>
   );
 };

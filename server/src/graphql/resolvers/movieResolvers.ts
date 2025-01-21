@@ -12,7 +12,17 @@ export const MovieResolvers = {
   Query: {
     movie: async (_parent: any, { imdbID }: { imdbID: string}) => {
       try {
-        const movie = await Movie.findOne({ imdbID: imdbID });
+        const movie = await Movie.findOne({ imdbID: imdbID })
+        .populate([
+          {
+            path: "ratings",
+            select: "score review averageRating",
+            populate: {
+              path: "user",
+              select: "username _id"
+            }
+          }
+        ]);
         if (!movie) {
           throw new Error("Movie not found.");
         }

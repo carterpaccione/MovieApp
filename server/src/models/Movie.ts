@@ -6,9 +6,9 @@ export interface IMovie extends Document {
     title: string;
     imdbID: string;
     poster: string;
-    ratings?: IRating[];
+    ratings: IRating[];
     calculateAverageRating(): number;
-    averageRating?: number;
+    averageRating: number;
 };
 
 export const movieSchema: Schema<IMovie> = new Schema({

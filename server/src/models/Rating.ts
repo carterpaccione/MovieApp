@@ -26,7 +26,7 @@ export const ratingSchema: Schema<IRating> = new Schema({
         type: Number,
         required: true,
         min: 1,
-        max: 5
+        max: 10
     },
     review: {
         type: String,

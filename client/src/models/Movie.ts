@@ -1,3 +1,5 @@
+import { IRating } from './Rating.js';
+
 export interface MovieSearch {
     Title: string;
     Year: string;
@@ -34,4 +36,6 @@ export interface IMovie {
     title: string;
     imdbID: string;
     poster: string;
+    ratings: IRating[];
+    averageRating: number;
 }
