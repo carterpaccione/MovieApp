@@ -23,24 +23,35 @@ export const RatingResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
+        // Make sure the Movie is in our database.
         const movie = await Movie.findOne({
           _id: input.movieID
         });
         if (!movie) {
           throw new Error("You must mark the movie as seen before rating it.");
         }
+        // Check if the User has already rated the Movie.
+        const existingRating = await Rating.findOne({ user: context.user._id, movie: movie._id });
+        if (existingRating) {
+          existingRating.score = input.score;
+          existingRating.review = input.review;
+          return await existingRating.save();
+        }
+        // Create the Rating.
         const rating = await Rating.create({
           user: context.user._id,
           movie: movie._id,
           score: input.score,
           review: input.review,
         });
-        User.findByIdAndUpdate({ _id: context.user._id },
-          {
-            $set: { movies: { movie: movie._id, status: "SEEN", rating: rating._id } },
-          },
+        // Update the User's movies array @ movieID with the rating.
+        const userUpdateResult = await User.findOneAndUpdate(
+          { _id: context.user._id, "movies.movie": movie._id },
+          { $set: { "movies.$.rating": rating._id } },
           { new: true }
-        )
+        );
+        console.log("Update result:", userUpdateResult);
+        // Update the Movie's ratings array with the rating.
         const result = await Movie.findByIdAndUpdate({ _id: movie._id},
           {
             $push: { ratings: rating._id },

@@ -131,7 +131,7 @@ export const UserResolvers = {
           );
           console.log("Updated User:", updatedUser);
           return updatedUser;
-        };
+        }
         let updatedUser = await User.findByIdAndUpdate(
           { _id: user._id },
           {
@@ -172,7 +172,7 @@ export const UserResolvers = {
           );
           console.log("Updated User:", updatedUser);
           return updatedUser;
-        };
+        }
         let updatedUser = await User.findByIdAndUpdate(
           { _id: user._id },
           {
