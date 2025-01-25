@@ -15,7 +15,7 @@ const Discover = () => {
                     <img src={movies.Poster} alt={movies.Title} />
                     <p>{movies.Title}</p>
                     <p>{movies.Year}</p>
-                    <button onClick={() => {navigate(`/movie/${movies.imdbID}`)}}>View Details</button>
+                    <button onClick={() => {navigate(`/movies/${movies.imdbID}`)}}>View Details</button>
                 </div>
             ))}
         </div>

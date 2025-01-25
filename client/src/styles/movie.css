@@ -1,0 +1,36 @@
+.movieContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid black;
+    border-radius: 1rem;
+}
+
+.movieTitle {
+    width: max-content;
+    font-weight: bold;
+}
+
+#moviePoster {
+    width: 25rem;
+    object-fit: cover;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.movieContainer button {
+    margin: 1rem;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: #f1356d;
+    color: white;
+    cursor: pointer;
+}

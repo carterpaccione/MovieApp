@@ -8,6 +8,7 @@ export const ratingTypeDefs = gql`
         user: User!
         score: Int!
         review: String
+        createdAt: String
     }
 
     input RateMovieInput {
@@ -17,6 +18,6 @@ export const ratingTypeDefs = gql`
     }
 
     type Mutation {
-        addRating(input: RateMovieInput): Movie
+        addRating(input: RateMovieInput): Rating
     }
 `;

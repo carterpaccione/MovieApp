@@ -9,5 +9,6 @@ export const userMovieTypeDefs = gql`
   type UserMovie {
     movie: Movie
     status: MovieStatus
+    rating: Rating
   }
 `;

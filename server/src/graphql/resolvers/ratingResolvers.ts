@@ -1,6 +1,6 @@
 import { AuthenticationError, IApolloContext } from "../../utils/auth.js";
 import Movie from "../../models/Movie.js";
-import Rating from "../../models/Rating.js";
+import Rating, { IRating } from "../../models/Rating.js";
 import User from "../../models/User.js";
 
 interface RateMovieInput {
@@ -22,53 +22,59 @@ export const RatingResolvers = {
       if (!context.user) {
         throw new AuthenticationError("Not logged in.");
       }
-      try {
-        // Make sure the Movie is in our database.
-        const movie = await Movie.findOne({
-          _id: input.movieID
-        });
-        if (!movie) {
-          throw new Error("You must mark the movie as seen before rating it.");
-        }
-        // Check if the User has already rated the Movie.
-        const existingRating = await Rating.findOne({ user: context.user._id, movie: movie._id });
-        if (existingRating) {
-          existingRating.score = input.score;
-          existingRating.review = input.review;
-          return await existingRating.save();
-        }
-        // Create the Rating.
-        const rating = await Rating.create({
-          user: context.user._id,
-          movie: movie._id,
-          score: input.score,
-          review: input.review,
-        });
-        // Update the User's movies array @ movieID with the rating.
-        const userUpdateResult = await User.findOneAndUpdate(
-          { _id: context.user._id, "movies.movie": movie._id },
-          { $set: { "movies.$.rating": rating._id } },
-          { new: true }
+      if (!input.movieID) {
+        throw new Error(
+          "This movie is not in our database. Mark it as Seen or add to your Watchlist to add it."
         );
-        console.log("Update result:", userUpdateResult);
-        // Update the Movie's ratings array with the rating.
-        const result = await Movie.findByIdAndUpdate({ _id: movie._id},
-          {
-            $push: { ratings: rating._id },
-          },
-          { new: true }
-        ).populate([
-          {
-            path: "ratings",
-            select: "score review createdAt",
-            populate: {
-              path: "user",
-              select: "username",
-            }
-          }
-        ]);
-        console.log("Result: ", result);
-        return result;
+      }
+      try {
+        const movie = await Movie.findOne({ _id: input.movieID }).populate(
+          "ratings"
+        );
+        if (!movie) {
+          throw new Error(
+            "Movie not found in our database, Mark as Seen to udpate it."
+          );
+        }
+        const userCheck = await User.findOne({
+          _id: context.user._id,
+          "movies.movie": input.movieID,
+        });
+        if (!userCheck) {
+          throw new Error(
+            "You must mark the movie as Seen before adding a rating."
+          );
+        }
+        let rating: IRating | null = await Rating.findOne({
+          user: context.user._id,
+          movie: input.movieID,
+        });
+        if (rating) {
+          rating.score = input.score;
+          rating.review = input.review;
+          await rating.save();
+          return rating;
+        } else {
+          rating = await Rating.create({
+            user: context.user._id,
+            movie: input.movieID,
+            score: input.score,
+            review: input.review,
+          });
+          await Movie.findByIdAndUpdate(
+            { _id: input.movieID },
+            {
+              $push: { ratings: rating._id },
+            },
+            { runValidators: true, new: true }
+          );
+          await User.findOneAndUpdate(
+            { _id: context.user._id, "movies.movie": input.movieID },
+            { $set: { "movies.$.rating": rating._id } },
+            { new: true }
+          );
+        }
+        return rating;
       } catch (error) {
         console.error("Error adding rating:", error);
         throw new Error("Could not add rating.");

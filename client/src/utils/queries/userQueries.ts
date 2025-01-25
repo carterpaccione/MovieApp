@@ -14,6 +14,32 @@ export const QUERY_ME = gql`
           poster
         }
         status
+        rating {
+          score
+          review
+        }
+      }
+    }
+  }
+`;
+
+export const QUERY_USER_BY_ID = gql`
+  query userByID($userID: ID!) {
+    userByID(userID: $userID) {
+      _id
+      username
+      movies {
+        movie {
+          _id
+          title
+          imdbID
+          poster
+        }
+        status
+        rating {
+          score
+          review
+        }
       }
     }
   }

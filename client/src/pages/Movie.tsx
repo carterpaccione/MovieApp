@@ -1,9 +1,15 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 
-import ReviewForm from "../components/reviewForm.js";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import "../styles/movie.css";
 
+import ReviewForm from "../components/reviewForm.js";
 import type { Movie, IMovie } from "../models/Movie.js";
 import type { IRating } from "../models/Rating.js";
 import type { IUserMovie } from "../models/UserMovie.js";
@@ -45,6 +51,11 @@ const Movie = () => {
     fetchAPIData();
   }, []);
 
+  const navigate = useNavigate();
+  const handleUserNavigate = (userID: string) => {
+    navigate(`/users/${userID}`);
+  };
+
   const { data: dbMovie } = useQuery<{ movie: IMovie }>(QUERY_MOVIE, {
     variables: { imdbID: idParams.id },
   });
@@ -55,6 +66,10 @@ const Movie = () => {
     refetch,
   } = useQuery<{ userMovieData: IUserMovie }>(QUERY_USER_MOVIE_DATA, {
     variables: { movieID: dbMovie?.movie._id },
+  });
+  
+  dbMovie?.movie.ratings?.map((rating: IRating) => {
+    console.log("Rating: ", rating);
   });
 
   const saveMovie = async () => {
@@ -107,6 +122,48 @@ const Movie = () => {
     }
   };
 
+  const checkUserMovieStatus = (data: IUserMovie | undefined) => {
+    console.log("checkUserMovieStatus Data: ", data);
+    if (data === null || data === undefined || !data) {
+      return (
+        <Col className="buttonContainer">
+          <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
+          <Button onClick={() => handleWatchListButton()}>
+            Add to Watchlist
+          </Button>
+        </Col>
+      );
+    }
+    if (data.status === "SEEN") {
+      return (
+        <Col className="buttonContainer">
+          <Button onClick={() => handleRemoveButton()}>Mark Unseen</Button>
+          <Button onClick={() => handleWatchListButton()}>
+            Add to Watchlist
+          </Button>
+        </Col>
+      );
+    } else if (data.status === "WATCH_LIST") {
+      return (
+        <Col className="buttonContainer">
+          <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
+          <Button onClick={() => handleRemoveButton()}>
+            Remove From WatchList
+          </Button>
+        </Col>
+      );
+    } else {
+      return (
+        <Col className="buttonContainer">
+          <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
+          <Button onClick={() => handleWatchListButton()}>
+            Add to Watchlist
+          </Button>
+        </Col>
+      );
+    }
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -115,42 +172,47 @@ const Movie = () => {
   }
 
   return (
-    <div>
-      <div>
-        {userMovieData ? (
-          userMovieData.userMovieData?.status === "SEEN" ? (
-            <div>
-              <button onClick={() => handleRemoveButton()}>Mark Unseen</button>
-              <button onClick={() => handleWatchListButton()}>Add to Watchlist</button>
-            </div>
-          ) : userMovieData.userMovieData?.status === "WATCH_LIST" ? (
-            <div>
-              <button onClick={() => handleSeenButton()}>Mark Seen</button>
-              <button onClick={() => handleRemoveButton()}>Remove From WatchList</button>
-            </div>
-          ) : (
-            <div>
-            <button onClick={() => handleSeenButton()}>Mark Seen</button>
-            <button onClick={() => handleWatchListButton()}>Add to Watchlist</button>
-          </div>
-          )
-        ) : (
-          <div>
-            <button onClick={() => handleSeenButton()}>Mark Seen</button>
-            <button onClick={() => handleWatchListButton()}>Add to Watchlist</button>
-          </div>
-        )}
-      </div>
-      <h1>{pageMovie?.Title}</h1>
-      <p>Average Rating: {dbMovie?.movie.averageRating}</p>
-      <img src={pageMovie?.Poster} alt={pageMovie?.Title} />
-      <p>{pageMovie?.Plot}</p>
-      {dbMovie?.movie._id && <ReviewForm movieID={dbMovie.movie._id} />}
-      <ul>
-        {dbMovie?.movie.ratings.map((rating: IRating) =>
-          <li key={rating._id}> {rating.score} - {rating.review} - {rating.user.username} - {new Date(rating.createdAt).toLocaleDateString()}</li>)}
-      </ul>
-    </div>
+    <Container fluid="md">
+      <Container>
+        <Row className="movieContainer">
+          <h2 className="movieTitle">{pageMovie?.Title}</h2>
+          <Row>{checkUserMovieStatus(userMovieData?.userMovieData)}</Row>
+          <Col>
+            <img
+              id="moviePoster"
+              src={pageMovie?.Poster}
+              alt={pageMovie?.Title}
+            />
+          </Col>
+          <Col>
+            <h4>Plot:</h4>
+            <p>{pageMovie?.Plot}</p>
+            <p>Average Rating: {dbMovie?.movie.averageRating}</p>
+            <Row>
+              {dbMovie?.movie._id && <ReviewForm movieID={dbMovie.movie._id} />}
+            </Row>
+          </Col>
+        </Row>
+      </Container>
+      <Container fluid>
+        <Row>
+          {dbMovie?.movie.ratings.map((rating: IRating) =>
+            rating.review && rating.review.length > 0 ? (
+              <Card key={rating._id} style={{ width: "18rem" }}>
+                <Card.Body>
+                  <Card.Title>{rating.score}</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">
+                    {new Date(rating.createdAt).toLocaleString()}
+                  </Card.Subtitle>
+                  <Card.Text>{rating.review}</Card.Text>
+                  <Card.Link onClick={() => handleUserNavigate(rating.user._id)}>{rating.user.username}</Card.Link>
+                </Card.Body>
+              </Card>
+            ) : null
+          )}
+        </Row>
+      </Container>
+    </Container>
   );
 };
 

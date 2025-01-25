@@ -16,7 +16,7 @@ export const MovieResolvers = {
         .populate([
           {
             path: "ratings",
-            select: "score review averageRating",
+            select: "score review averageRating createdAt",
             populate: {
               path: "user",
               select: "username _id"
@@ -26,6 +26,7 @@ export const MovieResolvers = {
         if (!movie) {
           throw new Error("Movie not found.");
         }
+        movie.calculateAverageRating();
         return movie;
       } catch (error) {
         console.error("Error fetching movie:", error);

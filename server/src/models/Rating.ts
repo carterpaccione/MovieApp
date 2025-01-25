@@ -36,8 +36,9 @@ export const ratingSchema: Schema<IRating> = new Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now
-    }
+        default: Date.now,
+        timestamps: true
+    },
 });
 
 const Rating = model<IRating>('Rating', ratingSchema);

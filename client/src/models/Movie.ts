@@ -37,5 +37,12 @@ export interface IMovie {
     imdbID: string;
     poster: string;
     ratings: IRating[];
+    calculateAverageRating(): number;
     averageRating: number;
+}
+
+export interface IUserMovie {
+    movie: IMovie;
+    status: string;
+    rating: IRating;
 }

@@ -4,7 +4,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Home from './pages/Home.js';
 import Discover from './pages/Discover.js';
 import Movie from './pages/Movie.js';
-import MyProfile from './pages/Profile.js';
+import MyProfile from './pages/MyProfile.js';
+import UserProfile from './pages/UserProfile.js';
 import App from './App.js';
 
 const router = createBrowserRouter([
@@ -22,12 +23,16 @@ const router = createBrowserRouter([
                 element: <Discover />
             },
             {
-                path: '/movie/:id',
+                path: '/movies/:id',
                 element: <Movie />
             },
             {
                 path: '/me',
                 element: <MyProfile></MyProfile>
+            },
+            {
+                path: '/users/:userID',
+                element: <UserProfile></UserProfile>
             }
         ]
     }

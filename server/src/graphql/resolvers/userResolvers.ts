@@ -31,9 +31,16 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: context.user._id }).populate(
-          "movies.movie"
-        );
+        const user = await User.findOne({ _id: context.user._id }).populate([
+          {
+            path: "movies",
+            select: "movie status rating _id",
+            populate: [
+              { path: "movie", select: "title imdbID poster _id" },
+              { path: "rating", select: "score review _id" },
+            ],
+          },
+        ]);
         console.log("user:", user);
         return user;
       } catch (error) {
@@ -41,12 +48,21 @@ export const UserResolvers = {
         throw new Error("Could not fetch user.");
       }
     },
-    user: async (_parent: any, userId: string, context: IApolloContext) => {
+    userByID: async (_parent: any, { userID }: { userID: string }, context: IApolloContext) => {
       if (!context.user) {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: userId });
+        const user = await User.findOne({ _id: userID }).populate([
+          {
+            path: "movies",
+            select: "movie status rating _id",
+            populate: [
+              { path: "movie", select: "title imdbID poster _id" },
+              { path: "rating", select: "score review _id" },
+            ],
+          },
+        ]);;
         if (!user) {
           throw new Error("User not found.");
         }

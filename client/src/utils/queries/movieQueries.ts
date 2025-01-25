@@ -7,13 +7,16 @@ export const QUERY_MOVIE = gql`
       title
       imdbID
       poster
+      averageRating
       ratings {
         _id
         score
         review
         user {
+          _id
           username
         }
+        createdAt
       }
       averageRating
     }
