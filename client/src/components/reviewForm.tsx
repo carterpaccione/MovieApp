@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 
 import Col from "react-bootstrap/Col";
@@ -8,14 +8,26 @@ import Button from "react-bootstrap/Button";
 
 import { ADD_RATING } from "../utils/mutations/ratingMutations";
 
-interface ReviewFormProps {
+export interface ReviewFormProps {
   movieID: string;
+  rating?: {
+    score: number;
+    review: string;
+  }
+  handleUserMovieRefetch: () => void;
+  handleDBMovieRefetch: () => void;
 }
 
 const ReviewForm = (props: ReviewFormProps) => {
-  const [score, setScore] = useState<number>(1);
-  const [review, setReview] = useState<string>("");
-  const [addRating] = useMutation(ADD_RATING);
+  console.log("ReviewFormProps:", props);
+  const [score, setScore] = useState<number>(props.rating?.score || 1);
+  const [review, setReview] = useState<string>(props.rating?.review || "");
+  const [addRating, { error }] = useMutation(ADD_RATING);
+
+  useEffect(() => {
+    setScore(props.rating?.score || 1);
+    setReview(props.rating?.review || "");
+  }, [props.rating]);
 
   const handleScoreChange = (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
     setScore(parseInt(e.target.value));
@@ -38,6 +50,8 @@ const ReviewForm = (props: ReviewFormProps) => {
         },
       });
       console.log(result);
+      props.handleDBMovieRefetch();
+      props.handleUserMovieRefetch();
     } catch (error) {
       console.error("Error adding rating:", error);
     }
@@ -61,9 +75,11 @@ const ReviewForm = (props: ReviewFormProps) => {
           <Form.Control
             as="textarea"
             aria-label="With textarea"
+            value={review}
             onChange={handleReviewChange}
           />
         </InputGroup>
+        {error && <p className="text-danger">{error.message}</p>}
         <Button type="submit">Submit</Button>
       </Col>
     </Form>

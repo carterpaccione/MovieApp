@@ -54,6 +54,10 @@ export const QUERY_USER_MOVIE_DATA = gql`
         imdbID
       }
       status
+      rating {
+        score
+        review
+      }
     }
   }
 `;

@@ -80,5 +80,39 @@ export const RatingResolvers = {
         throw new Error("Could not add rating.");
       }
     },
+    deleteRating: async (
+      _parent: any,
+      { ratingID }: { ratingID: string },
+      context: IApolloContext
+    ) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const updatedMovie = await Movie.findOneAndUpdate(
+          { $pull: { ratings: ratingID } },
+          { new: true }
+        );
+        if (!updatedMovie) {
+          throw new Error("Movie not found.");
+        }
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { "movies.$[].rating": ratingID } },
+          { new: true }
+        );
+        if (!updatedUser) {
+          throw new Error("User not found.");
+        }
+        const deletedRating = await Rating.findByIdAndDelete(ratingID);
+        if (!deletedRating) {
+          throw new Error("Rating not found.");
+        }
+        return `${deletedRating._id} has been deleted`;
+      } catch (error) {
+        console.error("Error deleting rating:", error);
+        throw new Error("Could not delete rating.");
+      }
+    },
   },
 };

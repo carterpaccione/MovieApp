@@ -26,10 +26,8 @@ export const userTypeDefs = gql`
   }
 
   type Query {
-    testContext: String
     me: User
     userByID(userID: ID!): User
-    userByUsername(username: String!): User
     userMovieData(movieID: ID!): UserMovie
   }
 

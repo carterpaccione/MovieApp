@@ -1,5 +1,5 @@
-import SignUp from '../components/signup.tsx';
-import Login from '../components/login.js'
+import SignUp from "../components/signup.tsx";
+import Login from "../components/login.js";
 import { useState } from "react";
 
 const Home = () => {

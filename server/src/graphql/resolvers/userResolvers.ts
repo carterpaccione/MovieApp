@@ -4,6 +4,8 @@ import {
   IApolloContext,
 } from "../../utils/auth.js";
 import User from "../../models/User.js";
+import Rating from "../../models/Rating.js";
+import Movie from "../../models/Movie.js";
 
 interface NewUserInput {
   input: {
@@ -48,7 +50,11 @@ export const UserResolvers = {
         throw new Error("Could not fetch user.");
       }
     },
-    userByID: async (_parent: any, { userID }: { userID: string }, context: IApolloContext) => {
+    userByID: async (
+      _parent: any,
+      { userID }: { userID: string },
+      context: IApolloContext
+    ) => {
       if (!context.user) {
         throw new AuthenticationError("Not logged in.");
       }
@@ -62,7 +68,7 @@ export const UserResolvers = {
               { path: "rating", select: "score review _id" },
             ],
           },
-        ]);;
+        ]);
         if (!user) {
           throw new Error("User not found.");
         }
@@ -81,13 +87,33 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const userData = await User.findOne({ _id: context.user._id });
+        const userData = await User.findOne({
+          _id: context.user._id,
+          movies: { $elemMatch: { movie: movieID } },
+        }).populate([
+          {
+            path: "movies",
+            select: "movie status rating _id",
+            populate: [
+              {
+                path: "movie",
+                select: "title imdbID poster _id",
+              },
+              {
+                path: "rating",
+                select: "score review _id",
+              },
+            ],
+          },
+        ]);
         if (!userData) {
           throw new Error("User movie data not found.");
         }
+        console.log("userData:", userData);
         const userMovieData = userData.movies.find(
-          (movie) => movie.movie.toString() === movieID
+          (movie) => movie.movie._id.toString() === movieID
         );
+        console.log("userMovieData:", userMovieData);
         return userMovieData;
       } catch (error) {
         console.error("Error fetching user movie data:", error);
@@ -215,14 +241,24 @@ export const UserResolvers = {
         if (!user) {
           throw new Error("User not found.");
         }
-        await User.findByIdAndUpdate(
+        const checkRating = await Rating.findOne({
+          movie: movieID,
+          user: context.user._id,
+        });
+        if (checkRating) {
+          await Rating.findByIdAndDelete(checkRating._id);
+          await Movie.findByIdAndUpdate(
+            { _id: movieID },
+            { $pull: { ratings: checkRating._id } },
+            { new: true }
+          );
+        }
+        const updatedUser = await User.findByIdAndUpdate(
           user._id,
-          {
-            $pull: { movies: { movie: movieID } },
-          },
-          { runValidators: true, new: true }
+          { $pull: { movies: { movie: movieID } } },
+          { new: true }
         );
-        return user;
+        return updatedUser;
       } catch (error) {
         console.error("Error removing movie from user:", error);
         throw new Error("Could not remove movie from user.");

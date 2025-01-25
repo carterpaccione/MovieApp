@@ -19,5 +19,6 @@ export const ratingTypeDefs = gql`
 
     type Mutation {
         addRating(input: RateMovieInput): Rating
+        deleteRating(ratingID: ID!): Rating
     }
 `;
