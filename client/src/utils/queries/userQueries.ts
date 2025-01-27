@@ -19,6 +19,10 @@ export const QUERY_ME = gql`
           review
         }
       }
+      friends {
+        _id
+        username
+      }
     }
   }
 `;
@@ -40,6 +44,10 @@ export const QUERY_USER_BY_ID = gql`
           score
           review
         }
+      }
+      friends {
+        _id
+        username
       }
     }
   }

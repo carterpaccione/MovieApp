@@ -19,6 +19,10 @@ const MyProfile = () => {
     navigate(`/movies/${imdbID}`);
   };
 
+  const handleUserNavigate = (userID: string) => {
+    navigate(`/users/${userID}`);
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
   console.log("Data:", data);
@@ -53,6 +57,18 @@ const MyProfile = () => {
                 {userMovie.rating.review ? (
                   <Card.Text>Review: {userMovie.rating.review}</Card.Text>
                 ) : null}
+              </Card.Body>
+            </Card>
+          ))}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <h3>FriendsList</h3>
+          {data.me.friends.map((friend: any, index: number) => (
+            <Card style={{ width: "18rem" }} key={index}>
+              <Card.Body>
+                <Card.Title onClick={() => handleUserNavigate(friend._id)}>{friend.username}</Card.Title>
               </Card.Body>
             </Card>
           ))}

@@ -42,6 +42,10 @@ export const UserResolvers = {
               { path: "rating", select: "score review _id" },
             ],
           },
+          {
+            path: "friends",
+            select: "username _id"
+          }
         ]);
         console.log("user:", user);
         return user;
@@ -68,6 +72,10 @@ export const UserResolvers = {
               { path: "rating", select: "score review _id" },
             ],
           },
+          {
+            path: "friends",
+            select: "username _id"
+          }
         ]);
         if (!user) {
           throw new Error("User not found.");

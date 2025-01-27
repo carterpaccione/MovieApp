@@ -1,10 +1,15 @@
 import { Schema, model, type Document } from 'mongoose';
 import { IUser } from './User';
 
+export enum FriendshipStatus {
+    PENDING = 'PENDING',
+    ACCEPTED = 'ACCEPTED',
+    REJECTED = 'REJECTED'
+}
 export interface IFriendship extends Document {
     requester: IUser;
     recipient: IUser;
-    status: string;
+    status: FriendshipStatus;
     createdAt: Date;
 }
 
@@ -21,8 +26,8 @@ export const friendshipSchema: Schema<IFriendship> = new Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'accepted', 'rejected'],
-        default: 'pending'
+        enum: Object.values(FriendshipStatus),
+        default: FriendshipStatus.PENDING
     },
     createdAt: {
         type: Date,

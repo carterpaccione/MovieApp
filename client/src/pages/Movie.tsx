@@ -50,6 +50,8 @@ const Movie = () => {
     variables: { movieID: dbMovie?.movie._id },
   });
 
+  const [buttonError, setButtonError] = useState(null);
+
   useEffect(() => {
     const fetchPageMovieData = async () => {
       if (idParams.id) {
@@ -107,6 +109,7 @@ const Movie = () => {
       return movieData;
     } catch (error: any) {
       console.error("Error saving movie:", error);
+      setButtonError(error.message);
     }
   };
 
@@ -119,6 +122,7 @@ const Movie = () => {
       userMovieDataRefetch();
     } catch (error: any) {
       console.error("Error saving movie:", error);
+      setButtonError(error.message);
     }
   };
 
@@ -129,8 +133,9 @@ const Movie = () => {
         variables: { movieID: movieData?.data.saveMovieToDB._id },
       });
       userMovieDataRefetch();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving movie:", error);
+      setButtonError(error.message);
     }
   };
 
@@ -141,6 +146,7 @@ const Movie = () => {
       userMovieDataRefetch();
     } catch (error: any) {
       console.error("Error removing movie:", error);
+      setButtonError(error.message);
     }
   };
 
@@ -190,7 +196,10 @@ const Movie = () => {
       <Container>
         <Row className="movieContainer">
           <h2 className="movieTitle">{pageMovie?.Title}</h2>
-          <Row>{checkUserMovieStatus(userMovieData?.userMovieData)}</Row>
+          <Row>
+            {checkUserMovieStatus(userMovieData?.userMovieData)}
+            {buttonError && <p className="text-danger">{buttonError}</p>}
+          </Row>
           <Col>
             <img
               id="moviePoster"

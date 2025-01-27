@@ -2,20 +2,28 @@ import { gql } from 'graphql-tag';
 
 export const friendshipTypeDefs = gql`
 
+    enum FriendshipStatus {
+        PENDING
+        ACCEPTED
+        REJECTED
+    }
+
     type Friendship {
         _id: ID!
         requester: User
         recipient: User
-        status: String
+        status: FriendshipStatus
     }
 
-    input NewFriendshipInput {
-        requesterId: ID!
+    type Query {
+        friendshipStatus(userID: ID!): Friendship
     }
 
     type Mutation {
-        addFriend(input: NewFriendshipInput): Friendship
-        acceptFriend(friendshipId: ID!): Friendship
-        rejectFriend(friendshipId: ID!): Friendship
+        addFriend(recipientID: ID!): Friendship
+        acceptFriend(friendshipID: ID!): Friendship
+        rejectFriend(friendshipID: ID!): Friendship
+        deleteRequest(friendshipID: ID!): ID
+        removeFriend(friendshipID: ID!): User
     }
 `;
