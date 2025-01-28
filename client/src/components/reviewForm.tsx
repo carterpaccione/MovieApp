@@ -19,7 +19,6 @@ export interface ReviewFormProps {
 }
 
 const ReviewForm = (props: ReviewFormProps) => {
-  console.log("ReviewFormProps:", props);
   const [score, setScore] = useState<number>(props.rating?.score || 1);
   const [review, setReview] = useState<string>(props.rating?.review || "");
   const [addRating, { error }] = useMutation(ADD_RATING);

@@ -53,7 +53,6 @@ export const RatingResolvers = {
           rating.score = input.score;
           rating.review = input.review;
           await rating.save();
-          return rating;
         } else {
           rating = await Rating.create({
             user: context.user._id,
@@ -61,11 +60,15 @@ export const RatingResolvers = {
             score: input.score,
             review: input.review,
           });
-          await Movie.findByIdAndUpdate(
-            { _id: input.movieID },
-            {
-              $push: { ratings: rating._id },
-            },
+          // await Movie.findByIdAndUpdate(
+          //   { _id: input.movieID },
+          //   {
+          //     $push: { ratings: rating._id },
+          //   },
+          //   { runValidators: true, new: true }
+          // );
+          await movie.updateOne(
+            { $push: { ratings: rating._id } },
             { runValidators: true, new: true }
           );
           await User.findOneAndUpdate(
@@ -73,6 +76,13 @@ export const RatingResolvers = {
             { $set: { "movies.$.rating": rating._id } },
             { new: true }
           );
+        }
+        const updatedMovie = await Movie.findOne({
+          _id: input.movieID,
+        }).populate("ratings");
+        if (updatedMovie) {
+          updatedMovie.calculateAverageRating();
+          await updatedMovie.save();
         }
         return rating;
       } catch (error) {
@@ -96,6 +106,9 @@ export const RatingResolvers = {
         if (!updatedMovie) {
           throw new Error("Movie not found.");
         }
+        await updatedMovie.updateOne({
+          averageRating: updatedMovie.calculateAverageRating(),
+        });
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $pull: { "movies.$[].rating": ratingID } },

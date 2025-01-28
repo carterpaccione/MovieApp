@@ -29,10 +29,10 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  app.use((req, _res, next) => {
-    console.log("Request received: ", req.method, req.url);
-    next();
-  });
+  // app.use((req, _res, next) => {
+  //   console.log("Request received: ", req.method, req.url);
+  //   next();
+  // });
   app.use(
     "/graphql",
     expressMiddleware(server, {

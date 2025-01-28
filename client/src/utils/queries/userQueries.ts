@@ -60,9 +60,11 @@ export const QUERY_USER_MOVIE_DATA = gql`
         _id
         title
         imdbID
+        averageRating
       }
       status
       rating {
+        _id
         score
         review
       }

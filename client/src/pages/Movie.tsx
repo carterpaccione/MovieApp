@@ -44,12 +44,13 @@ const Movie = () => {
   }>(QUERY_MOVIE, {
     variables: { imdbID: idParams.id },
   });
-  const { data: userMovieData, refetch: userMovieDataRefetch } = useQuery<{
+  let { data: userMovieData, refetch: userMovieDataRefetch } = useQuery<{
     userMovieData: IUserMovie;
   }>(QUERY_USER_MOVIE_DATA, {
     variables: { movieID: dbMovie?.movie._id },
   });
 
+  const [buttonState, setButtonState] = useState<JSX.Element | null>(null);
   const [buttonError, setButtonError] = useState(null);
 
   useEffect(() => {
@@ -66,12 +67,13 @@ const Movie = () => {
           setPageMovie(data);
         } catch (error: any) {
           console.error("Error fetching data:", error);
+          setPageMovie(null);
         }
       }
     };
 
     const updateReviewFormProps = () => {
-      if (userMovieData) {
+      if (userMovieData?.userMovieData) {
         setReviewFormProps({
           movieID: dbMovie?.movie._id || "",
           rating: {
@@ -91,11 +93,61 @@ const Movie = () => {
       }
     };
 
-    fetchPageMovieData();
-    updateReviewFormProps();
-  }, [idParams.id, dbMovie, userMovieData, userMovieDataRefetch]);
+    const updateButtonState = () => {
+      if (!userMovieData || !userMovieData.userMovieData) {
+        setButtonState(
+          <Col className="buttonContainer">
+            <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
+            <Button onClick={() => handleWatchListButton()}>
+              Add to Watchlist
+            </Button>
+          </Col>
+        );
+        return;
+      }
+
+      if (userMovieData.userMovieData.status === "SEEN") {
+        setButtonState(
+          <Col className="buttonContainer">
+            <Button onClick={() => handleRemoveButton()}>Mark Unseen</Button>
+            <Button onClick={() => handleWatchListButton()}>
+              Add to Watchlist
+            </Button>
+          </Col>
+        );
+        return;
+      } else if (userMovieData.userMovieData.status === "WATCH_LIST") {
+        setButtonState(
+          <Col className="buttonContainer">
+            <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
+            <Button onClick={() => handleRemoveButton()}>
+              Remove From WatchList
+            </Button>
+          </Col>
+        );
+        return;
+      } else {
+        setButtonState(
+          <Col className="buttonContainer">
+            <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
+            <Button onClick={() => handleWatchListButton()}>
+              Add to Watchlist
+            </Button>
+          </Col>
+        );
+        return;
+      }
+    }
+
+    if (idParams.id) fetchPageMovieData();
+    updateButtonState();
+    // if (userMovieData) updateReviewFormProps();
+    
+  }, [idParams.id, pageMovie, dbMovie, userMovieDataRefetch]);
 
   const saveMovie = async () => {
+    console.log("Saving movie to database...");
+    console.log("Page movie:", pageMovie);
     try {
       const movieData = await saveMovieToDB({
         variables: {
@@ -142,52 +194,9 @@ const Movie = () => {
   const handleRemoveButton = async () => {
     try {
       await removeFromUser({ variables: { movieID: dbMovie?.movie._id } });
-      dbMovieRefetch();
-      userMovieDataRefetch();
     } catch (error: any) {
       console.error("Error removing movie:", error);
-      setButtonError(error.message);
-    }
-  };
-
-  const checkUserMovieStatus = (data: IUserMovie | undefined) => {
-    if (data === null || data === undefined || !data) {
-      return (
-        <Col className="buttonContainer">
-          <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
-          <Button onClick={() => handleWatchListButton()}>
-            Add to Watchlist
-          </Button>
-        </Col>
-      );
-    }
-    if (data.status === "SEEN") {
-      return (
-        <Col className="buttonContainer">
-          <Button onClick={() => handleRemoveButton()}>Mark Unseen</Button>
-          <Button onClick={() => handleWatchListButton()}>
-            Add to Watchlist
-          </Button>
-        </Col>
-      );
-    } else if (data.status === "WATCH_LIST") {
-      return (
-        <Col className="buttonContainer">
-          <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
-          <Button onClick={() => handleRemoveButton()}>
-            Remove From WatchList
-          </Button>
-        </Col>
-      );
-    } else {
-      return (
-        <Col className="buttonContainer">
-          <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
-          <Button onClick={() => handleWatchListButton()}>
-            Add to Watchlist
-          </Button>
-        </Col>
-      );
+      await userMovieDataRefetch();
     }
   };
 
@@ -197,7 +206,7 @@ const Movie = () => {
         <Row className="movieContainer">
           <h2 className="movieTitle">{pageMovie?.Title}</h2>
           <Row>
-            {checkUserMovieStatus(userMovieData?.userMovieData)}
+            {buttonState}
             {buttonError && <p className="text-danger">{buttonError}</p>}
           </Row>
           <Col>
@@ -226,7 +235,7 @@ const Movie = () => {
       </Container>
       <Container fluid>
         <Row>
-          {dbMovie?.movie.ratings.map((rating: IRating) =>
+          {dbMovie?.movie.ratings && dbMovie.movie.ratings.map((rating: IRating) =>
             rating.review && rating.review.length > 0 ? (
               <Card key={rating._id} style={{ width: "18rem" }}>
                 <Card.Body>

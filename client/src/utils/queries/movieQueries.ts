@@ -22,3 +22,15 @@ export const QUERY_MOVIE = gql`
     }
   }
 `;
+
+export const QUERY_TOP_MOVIES = gql`
+  query topMovies {
+    topMovies {
+      _id
+      title
+      imdbID
+      poster
+      averageRating
+    }
+  }
+`;

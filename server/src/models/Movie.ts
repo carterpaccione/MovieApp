@@ -40,27 +40,37 @@ export const movieSchema: Schema<IMovie> = new Schema({
 
 movieSchema.methods.calculateAverageRating = function () {
   console.log("This ratings: ", this.ratings);
-  console.log("Ratings: ", this.ratings.map((rating: IRating) => rating.score));
+  console.log(
+    "Ratings: ",
+    this.ratings.map((rating: IRating) => rating.score)
+  );
   if (!this.ratings || this.ratings.length === 0) {
     this.averageRating = 0; // Set to 0 if no ratings
     return;
   }
 
   const validScores = this.ratings
-    .filter((rating: IRating) => rating.score !== undefined && !isNaN(rating.score))
+    .filter(
+      (rating: IRating) => rating.score !== undefined && !isNaN(rating.score)
+    )
     .map((rating: IRating) => rating.score);
 
   if (validScores.length === 0) {
     this.averageRating = 0; // Set to 0 if all scores are invalid
-    return;
+    return this.averageRating;
   }
 
-  this.averageRating =
+  const averageRating =
     validScores.reduce((a: number, b: number) => a + b, 0) / validScores.length;
+
+  console.log("Average rating: ", averageRating);
+  this.averageRating = averageRating;
+  console.log("This.averageRating: ", this.averageRating);
+  return averageRating;
 };
 
 movieSchema.pre("save", function (next) {
-  this.calculateAverageRating();
+  this.averageRating = this.calculateAverageRating();
   next();
 });
 

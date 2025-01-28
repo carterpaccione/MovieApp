@@ -1,16 +1,21 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { MovieSearch } from "../models/Movie";
+import { useQuery } from "@apollo/client";
+import { MovieSearch, IMovie } from "../models/Movie";
 
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 import "../styles/discover.css";
+import { QUERY_TOP_MOVIES } from "../utils/queries/movieQueries";
 
 const Discover = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const movies = location.state?.movies || [];
+
+  const { data: topMoviesData } = useQuery<{ topMovies: IMovie[] }>(QUERY_TOP_MOVIES);
+  console.log("topMoviesData", topMoviesData);
 
   return (
     <Container className="discover">

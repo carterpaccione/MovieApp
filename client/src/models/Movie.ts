@@ -9,26 +9,34 @@ export interface MovieSearch {
 }
 
 export interface Movie {
-    Title: string;
-    Year: string;
-    Rated: string;
-    Released: string;
-    Runtime: string;
-    Genre: string;
-    Director: string;
-    Writer: string;
     Actors: string;
-    Plot: string;
-    Language: string;
-    Country: string;
     Awards: string;
-    Poster: string;
-    Ratings: [];
-    MetaScore: string;
-    imdbRating: string;
-    imdbID: string;
-    Type: string;
     BoxOffice: string;
+    Country: string;
+    DVD: string;
+    Director: string;
+    Genre: string;
+    Language: string;
+    Metascore: string;
+    Plot: string;
+    Poster: string;
+    Production: string;
+    Rated: string;
+    Ratings: [{
+        Source: string;
+        Value: string;
+    }];
+    Released: string;
+    Response: string;
+    Runtime: string;
+    Title: string;
+    Type: string;
+    Website: string;
+    Writer: string;
+    Year: string;
+    imdbID: string;
+    imdbRating: string;
+    imdbVotes: string;
 }
 
 export interface IMovie {
@@ -36,7 +44,7 @@ export interface IMovie {
     title: string;
     imdbID: string;
     poster: string;
-    ratings: IRating[];
+    ratings?: IRating[];
     calculateAverageRating(): number;
     averageRating: number;
 }

@@ -20,7 +20,7 @@ export const authenticationToken: ContextFunction<
   let token = req.body.token || req.query.token || req.headers.authorization;
 
   if (req.headers.authorization) {
-    console.log("Recieved token:", token);
+    // console.log("Recieved token:", token);
     token = token.split(" ").pop().trim();
   }
 
@@ -33,7 +33,7 @@ export const authenticationToken: ContextFunction<
     const { data }: any = jwt.verify(token, process.env.JWT_SECRET_KEY || "", {
       maxAge: "2hr",
     });
-    console.log("Decoded token:", data);
+    // console.log("Decoded token:", data);
     return { user: data };
   } catch (error) {
     console.log("Invalid Token on route: ", req.url);

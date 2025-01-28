@@ -19,6 +19,7 @@ export const movieTypeDefs = gql`
 
     type Query {
         movie(imdbID: String!): Movie
+        topMovies: [Movie]
     }
 
     type Mutation {

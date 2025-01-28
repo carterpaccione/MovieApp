@@ -98,14 +98,15 @@ export const UserResolvers = {
         const userData = await User.findOne({
           _id: context.user._id,
           movies: { $elemMatch: { movie: movieID } },
-        }).populate([
+        })
+        .populate([
           {
             path: "movies",
             select: "movie status rating _id",
             populate: [
               {
                 path: "movie",
-                select: "title imdbID poster _id",
+                select: "title imdbID poster averageRating _id",
               },
               {
                 path: "rating",
@@ -255,11 +256,14 @@ export const UserResolvers = {
         });
         if (checkRating) {
           await Rating.findByIdAndDelete(checkRating._id);
-          await Movie.findByIdAndUpdate(
+          const updatedMovie = await Movie.findByIdAndUpdate(
             { _id: movieID },
             { $pull: { ratings: checkRating._id } },
             { new: true }
           );
+          if (updatedMovie) {
+            updatedMovie.averageRating = updatedMovie.calculateAverageRating();
+          }
         }
         const updatedUser = await User.findByIdAndUpdate(
           user._id,
