@@ -4,6 +4,7 @@ export const userMovieTypeDefs = gql`
   enum MovieStatus {
     SEEN
     WATCH_LIST
+    NONE
   }
 
   type UserMovie {

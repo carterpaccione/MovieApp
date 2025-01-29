@@ -99,29 +99,38 @@ export const RatingResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
+        const ratingToDelete = await Rating.findById(ratingID).populate([{
+          path: "movie",
+          select: "_id"
+        }]);
+        if (!ratingToDelete) {
+          throw new Error("Rating not found.");
+        }
+        console.log("FOUND RATING TO DELETE")
         const updatedMovie = await Movie.findOneAndUpdate(
+          { _id: ratingToDelete.movie._id },
           { $pull: { ratings: ratingID } },
           { new: true }
         );
         if (!updatedMovie) {
           throw new Error("Movie not found.");
         }
+        console.log("FOUND AND UPDATED MOVIE")
         await updatedMovie.updateOne({
           averageRating: updatedMovie.calculateAverageRating(),
         });
+        console.log("FOUND AND UPDATED MOVIE")
         const updatedUser = await User.findOneAndUpdate(
-          { _id: context.user._id },
-          { $pull: { "movies.$[].rating": ratingID } },
-          { new: true }
+          { _id: context.user._id, "movies.rating": ratingID },
+          { $set: { "movies.$.rating": null } },
+          { runValidators: true, new: true }
         );
         if (!updatedUser) {
           throw new Error("User not found.");
         }
-        const deletedRating = await Rating.findByIdAndDelete(ratingID);
-        if (!deletedRating) {
-          throw new Error("Rating not found.");
-        }
-        return `${deletedRating._id} has been deleted`;
+        console.log("FOUND AND UPDATED USER")
+        await Rating.findByIdAndDelete(ratingID);
+        return ratingToDelete._id;
       } catch (error) {
         console.error("Error deleting rating:", error);
         throw new Error("Could not delete rating.");

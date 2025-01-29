@@ -4,8 +4,8 @@ import {
   IApolloContext,
 } from "../../utils/auth.js";
 import User from "../../models/User.js";
-import Rating from "../../models/Rating.js";
-import Movie from "../../models/Movie.js";
+// import Rating from "../../models/Rating.js";
+// import Movie from "../../models/Movie.js";
 
 interface NewUserInput {
   input: {
@@ -173,10 +173,10 @@ export const UserResolvers = {
         );
         if (check) {
           console.log("Movie already in user's list.");
-          let updatedUser = await User.findByIdAndUpdate(
-            { _id: user._id },
+          let updatedUser = await User.findOneAndUpdate(
+            { _id: user._id, "movies.movie": movieID },
             {
-              $set: { movies: { movie: movieID, status: "SEEN" } },
+              $set: { "movies.$.status": "SEEN" },
             },
             { runValidators: true, new: true }
           );
@@ -214,10 +214,10 @@ export const UserResolvers = {
         );
         if (check) {
           console.log("Movie already in user's list.");
-          let updatedUser = await User.findByIdAndUpdate(
-            { _id: user._id },
+          let updatedUser = await User.findOneAndUpdate(
+            { _id: user._id, "movies.movie": movieID },
             {
-              $set: { movies: { movie: movieID, status: "WATCH_LIST" } },
+              $set: { "movies.$.status": "WATCH_LIST" },
             },
             { runValidators: true, new: true }
           );
@@ -250,25 +250,27 @@ export const UserResolvers = {
         if (!user) {
           throw new Error("User not found.");
         }
-        const checkRating = await Rating.findOne({
-          movie: movieID,
-          user: context.user._id,
-        });
-        if (checkRating) {
-          await Rating.findByIdAndDelete(checkRating._id);
-          const updatedMovie = await Movie.findByIdAndUpdate(
-            { _id: movieID },
-            { $pull: { ratings: checkRating._id } },
-            { new: true }
-          );
-          if (updatedMovie) {
-            updatedMovie.averageRating = updatedMovie.calculateAverageRating();
-          }
-        }
-        const updatedUser = await User.findByIdAndUpdate(
-          user._id,
-          { $pull: { movies: { movie: movieID } } },
-          { new: true }
+        // Remove rating from movie and user (adds complications)
+        // const checkRating = await Rating.findOne({
+        //   movie: movieID,
+        //   user: context.user._id,
+        // });
+        // if (checkRating) {
+        //   console.log("Rating found:", checkRating);
+        //   await Rating.findByIdAndDelete(checkRating._id);
+        //   const updatedMovie = await Movie.findByIdAndUpdate(
+        //     { _id: movieID },
+        //     { $pull: { ratings: checkRating._id } },
+        //     { new: true }
+        //   );
+        //   if (updatedMovie) {
+        //     updatedMovie.averageRating = updatedMovie.calculateAverageRating();
+        //   }
+        // }
+        const updatedUser = await User.findOneAndUpdate(
+          {_id: user._id, "movies.movie": movieID},
+          { $set: { "movies.$.status": "NONE" } },
+          { runValidators: true, new: true }
         );
         return updatedUser;
       } catch (error) {

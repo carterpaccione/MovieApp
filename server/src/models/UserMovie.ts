@@ -5,6 +5,7 @@ import { IRating } from "./Rating.js";
 export enum MovieStatus {
   SEEN = "SEEN",
   WATCH_LIST = "WATCH_LIST",
+  NONE = "NONE",
 }
 
 export interface IUserMovie extends Document {

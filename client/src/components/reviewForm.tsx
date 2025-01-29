@@ -59,7 +59,7 @@ const ReviewForm = (props: ReviewFormProps) => {
   return (
     <Form onSubmit={handleFormSubmit}>
       <Col id="scoreSelector">
-        <Form.Label>Rate This Movie: {score}</Form.Label>
+        <Form.Label>{props.rating ? "Update Rating: " : `Rate this movie: `}{score}</Form.Label>
         <Form.Range
         min={1}
         max={10}
