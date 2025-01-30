@@ -6,10 +6,10 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 
-import { IUserMovie } from "../models/Movie";
+import MovieTable from "../components/movieTable";
+
 import { QUERY_USER_BY_ID } from "../utils/queries/userQueries";
 import { QUERY_FRIENDSHIP_STATUS } from "../utils/queries/friendshipQueries";
 import {
@@ -44,9 +44,6 @@ const UserProfile = () => {
   const [removeFriend] = useMutation(REMOVE_FRIEND);
 
   const navigate = useNavigate();
-  const handleMovieNavigate = (imdbID: string) => {
-    navigate(`/movies/${imdbID}`);
-  };
   const handleUserNavigate = (userID: string) => {
     let myInfo = JSON.parse(localStorage.getItem("user") || "{}");
     console.log(
@@ -162,30 +159,7 @@ const UserProfile = () => {
     <Container>
       <h3>{userData.userByID.username}'s Profile</h3>
       {checkFriendshipStatus()}
-      {userData.userByID.movies.map((userMovie: IUserMovie, index: number) => (
-        <Card style={{ width: "18rem" }} key={index}>
-          <Card.Img variant="top" src={userMovie.movie.poster}></Card.Img>
-          <Card.Body>
-            <Card.Title
-              onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}
-            >
-              {userMovie.movie.title}
-            </Card.Title>
-            <ListGroup className="list-group-flush">
-              <ListGroup.Item>Status: {userMovie.status}</ListGroup.Item>
-              <ListGroup.Item>
-                Rating:{" "}
-                {userMovie.rating.score
-                  ? userMovie.rating.score
-                  : "Not Yet Rated"}
-              </ListGroup.Item>
-            </ListGroup>
-            {userMovie.rating.review ? (
-              <Card.Text>Review: {userMovie.rating.review}</Card.Text>
-            ) : null}
-          </Card.Body>
-        </Card>
-      ))}
+      <MovieTable movies={userData.userByID.movies} />
       <Row>
         <Col>
           <h3>FriendsList</h3>

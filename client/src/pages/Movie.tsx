@@ -101,6 +101,7 @@ const Movie = () => {
         variables: { movieID: movieData?.data.saveMovieToDB._id },
       });
       userMovieDataRefetch();
+      await dbMovieRefetch();
     } catch (error: any) {
       console.error("Error saving movie:", error);
       setButtonError(error.message);
