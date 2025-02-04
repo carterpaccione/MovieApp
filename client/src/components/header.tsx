@@ -1,8 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Form from "react-bootstrap/Form";
 
 import AuthService from "../utils/auth";
+
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import "../styles/header.css";
 
 interface ImportMeta {
@@ -12,7 +17,6 @@ interface ImportMeta {
 }
 
 const Header = () => {
-  
   const token = AuthService.loggedIn();
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
@@ -37,34 +41,35 @@ const Header = () => {
   };
 
   return (
-    <header>
-      <div className="container">
+    <Navbar>
+      <Container>
         <h1>Movie App</h1>
-        <nav>
-          <ul>
-            <li>
-              <a href="/discover">Discover</a>
-            </li>
-              {token ? <li><a href="/me">My Profile</a></li> : null}
-              {token ? <li><a href="/" onClick={AuthService.logout}>Logout</a></li> : <li><a href="/">Login / Sign Up</a></li>}
-          </ul>
-        </nav>
-      </div>
-      <div className='search-container'>
-        <Form.Control className="search-bar"
-          size="lg"
-          type="text"
-          placeholder="Search for a movie..."
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
-        />
-        <button
-        className="search-button"
-        onClick={() => handleSearch(query)}>Search</button>
-      </div>
-    </header>
+        <Form id="search-container">
+          <Form.Control
+            id="search-bar"
+            size="lg"
+            type="text"
+            placeholder="Search for a movie..."
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+            }}
+          />
+          <Button onClick={() => handleSearch(query)}>Search</Button>
+        </Form>
+        <Nav>
+          <Nav.Link href="/discover">Discover</Nav.Link>
+          {token ? <Nav.Link href="/me">My Profile</Nav.Link> : null}
+          {token ? (
+            <Nav.Link href="/" onClick={AuthService.logout}>
+              Logout
+            </Nav.Link>
+          ) : (
+            <Nav.Link href="/">Login / Sign Up</Nav.Link>
+          )}
+        </Nav>
+      </Container>
+    </Navbar>
   );
 };
 

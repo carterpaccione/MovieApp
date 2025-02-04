@@ -7,6 +7,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import "../styles/myProfile.css";
 
 import { Recommendation } from "../models/Movie.js";
 
@@ -22,7 +23,9 @@ const MyProfile = () => {
     localStorage.setItem("recommendations", JSON.stringify([]));
   }
 
-  const [recommendations] = useState<Recommendation[]>(JSON.parse(localRecs || "[]"));
+  const [recommendations] = useState<Recommendation[]>(
+    JSON.parse(localRecs || "[]")
+  );
 
   const navigate = useNavigate();
 
@@ -41,32 +44,30 @@ const MyProfile = () => {
   return (
     <Container>
       <Row>
-        <Col>
-        <h4>Recommended For You</h4>
-        {recommendations.length > 0 ? (
-          recommendations.map((movie: Recommendation, index: number) => (
-            <Card style={{ width: "18rem" }} key={index}>
-              <Card.Body>
-                <Card.Title>{movie.title}</Card.Title>
-                <Button onClick={() => handleMovieNavigate(movie.imdbID)}>View</Button>
-              </Card.Body>
-            </Card>
-          ))
-        ) : (
-          <div>No recommendations available.</div>
-        )}
-        </Col>
+          <h3>{data.me.username}'s Profile</h3>
       </Row>
       <Row>
-        <Row>
-        <h3>{data.me.username}'s Profile</h3>
-        </Row>
+        <Col id="recommended-container">
+          <h4>Recommended For You</h4>
+          {recommendations.length > 0 ? (
+            recommendations.map((movie: Recommendation, index: number) => (
+              <Card style={{ width: "18rem" }} key={index}>
+                <Card.Body>
+                  <Card.Title>{movie.title}</Card.Title>
+                  <Button onClick={() => handleMovieNavigate(movie.imdbID)}>
+                    View
+                  </Button>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <p>No recommendations available.</p>
+          )}
+        </Col>
         <Col>
           <MovieTable movies={data.me.movies} />
         </Col>
-      </Row>
-      <Row>
-        <Col>
+        <Col id="friends-container">
           <h3>FriendsList</h3>
           {data.me.friends.length > 0 ? (
             data.me.friends.map((friend: any, index: number) => (

@@ -6,6 +6,8 @@ import { useMutation } from "@apollo/client";
 import { LOGIN } from "../utils/mutations/userMutations";
 import AuthService from "../utils/auth";
 
+import "../styles/launchForm.css";
+
 const Login = () => {
   const [login] = useMutation(LOGIN);
 
@@ -33,7 +35,7 @@ const Login = () => {
   };
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <Form id="form-container" onSubmit={handleFormSubmit}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Username</Form.Label>
         <Form.Control

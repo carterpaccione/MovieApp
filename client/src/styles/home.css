@@ -1,0 +1,24 @@
+#home-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#home-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+#formState-button {
+    margin: 0.5rem;
+    width: max-content;
+}
+
+#formState-button:hover {
+    background-color: greenyellow;
+    color: black;
+}

@@ -1,9 +1,16 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { MovieSearch, IMovie, SeenMovie, Recommendation } from "../models/Movie";
+import {
+  MovieSearch,
+  IMovie,
+  SeenMovie,
+  Recommendation,
+} from "../models/Movie";
 
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
@@ -78,27 +85,29 @@ const Discover = () => {
   };
 
   return (
-    <Container className="discover">
-      {movies.map((movies: MovieSearch) => (
-        <Card key={movies.imdbID}>
-          <Card.Img src={movies.Poster} alt={movies.Title} />
-          <Card.Title>{movies.Title}</Card.Title>
-          <Card.Text>{movies.Year}</Card.Text>
-          <Button
-            onClick={() => {
-              navigate(`/movies/${movies.imdbID}`);
-            }}
-          >
-            View Details
-          </Button>
-        </Card>
-      ))}
-      <Container>
-        <h4>Top</h4>
+    <Container>
+      <Row>
+        {movies.map((movies: MovieSearch) => (
+          <Card key={movies.imdbID}>
+            <Card.Img src={movies.Poster} alt={movies.Title} />
+            <Card.Title>{movies.Title}</Card.Title>
+            <Card.Text>{movies.Year}</Card.Text>
+            <Button
+              onClick={() => {
+                navigate(`/movies/${movies.imdbID}`);
+              }}
+            >
+              View Details
+            </Button>
+          </Card>
+        ))}
+      </Row>
+      <Row>
+        <h4>Top 5</h4>
         {topMoviesData?.topMovies.map((movie) => {
           return (
             <Card key={movie.imdbID}>
-              <Card.Img src={movie.poster} alt={movie.title} />
+              <Card.Img id="card-image" src={movie.poster} alt={movie.title} />
               <Card.Title>{movie.title}</Card.Title>
               <Card.Text>{movie.averageRating}</Card.Text>
               <Button
@@ -111,35 +120,39 @@ const Discover = () => {
             </Card>
           );
         })}
-      </Container>
-      <Container>
-        <h4>Recommended For You</h4>
-        {userListData?.userListData.movies.length === 0 ? (
-          null
-        ) : (
-          <Button
-          onClick={() =>
-            getRecommendations(userListData?.userListData.movies || [])
-          }
-        >
-          Get
-        </Button>
-        )}
-        {recommendations.length > 0 &&
-          recommendations.map((movie: Recommendation) => (
-            <Card key={movie.imdbID}>
-              <Card.Title>{movie.title}</Card.Title>
-              <Card.Text>{movie.year}</Card.Text>
-              <Button
-                onClick={() => {
-                  navigate(`/movies/${movie.imdbID}`);
-                }}
-              >
-                View Details
-              </Button>
-            </Card>
-          ))}
-      </Container>
+      </Row>
+      <Row>
+        <Col sm={2}>
+          <h4>Recommended For You</h4>
+          {userListData?.userListData.movies.length === 0 ? null : (
+            <Button
+              onClick={() =>
+                getRecommendations(userListData?.userListData.movies || [])
+              }
+            >
+              Get Recs
+            </Button>
+          )}
+        </Col>
+        <Col sm={10}>
+          <Row>
+            {recommendations.length > 0 &&
+              recommendations.map((movie: Recommendation) => (
+                <Card key={movie.imdbID}>
+                  <Card.Title>{movie.title}</Card.Title>
+                  <Card.Text>{movie.year}</Card.Text>
+                  <Button
+                    onClick={() => {
+                      navigate(`/movies/${movie.imdbID}`);
+                    }}
+                  >
+                    View Details
+                  </Button>
+                </Card>
+              ))}
+          </Row>
+        </Col>
+      </Row>
     </Container>
   );
 };
