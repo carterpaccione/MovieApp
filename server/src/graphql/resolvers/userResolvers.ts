@@ -4,8 +4,6 @@ import {
   IApolloContext,
 } from "../../utils/auth.js";
 import User from "../../models/User.js";
-// import Rating from "../../models/Rating.js";
-// import Movie from "../../models/Movie.js";
 
 interface NewUserInput {
   input: {
@@ -133,9 +131,10 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: context.user._id }, { movies: { $elemMatch: { status: "SEEN" } } }).populate([
+        const user = await User.findOne({ _id: context.user._id }).populate([
           {
             path: "movies",
+            match: { status: "SEEN" },
             select: "movie status rating",
             populate: [
               {
@@ -152,6 +151,7 @@ export const UserResolvers = {
         if (!user) {
           throw new Error("User not found.");
         }
+        console.log("userListData:", user);
         return user;
       } catch (error) {
         console.error("Error fetching user:", error);

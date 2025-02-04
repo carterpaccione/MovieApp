@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { MovieSearch, IMovie } from "../models/Movie";
+import { MovieSearch, IMovie, SeenMovie, Recommendation } from "../models/Movie";
 
 import Container from "react-bootstrap/Container";
 import Card from "react-bootstrap/Card";
@@ -10,24 +10,6 @@ import Button from "react-bootstrap/Button";
 import "../styles/discover.css";
 import { QUERY_TOP_MOVIES } from "../utils/queries/movieQueries";
 import { QUERY_USER_LIST_DATA } from "../utils/queries/userQueries";
-import { set } from "date-fns";
-
-interface SeenMovie {
-  movie: {
-    imdbID: string;
-    title: string;
-  };
-  rating: {
-    score: number;
-  };
-  status: string;
-}
-
-interface Recommendation {
-  title: string;
-  year: string;
-  imdbID: string;
-}
 
 const Discover = () => {
   const location = useLocation();
@@ -44,10 +26,14 @@ const Discover = () => {
   );
   console.log("Top Movies Data: ", topMoviesData);
 
-  const { data: userListData } = useQuery<{ userListData: { movies: SeenMovie[] } }>(QUERY_USER_LIST_DATA);
+  const { data: userListData } = useQuery<{
+    userListData: { movies: SeenMovie[] };
+  }>(QUERY_USER_LIST_DATA);
   console.log("User List Data: ", userListData?.userListData);
 
-  const [recommendations, setRecommendations] = useState<Recommendation[]>(JSON.parse(localRecs || '[]'));
+  const [recommendations, setRecommendations] = useState<Recommendation[]>(
+    JSON.parse(localRecs || "[]")
+  );
   console.log("Recommendations: ", recommendations);
 
   const getRecommendations = async (userMovies: SeenMovie[]) => {
@@ -64,7 +50,7 @@ const Discover = () => {
       rating: {
         score: movie.rating?.score || null,
       },
-    }))
+    }));
 
     try {
       const response = await fetch("http://localhost:3001/api/recommend", {
@@ -79,33 +65,20 @@ const Discover = () => {
       }
       const data = await response.json();
       console.log("Data: ", data);
-      localStorage.setItem("recommendations", JSON.stringify(data.parsedResponse.recommendations));
+      localStorage.setItem(
+        "recommendations",
+        JSON.stringify(data.parsedResponse.recommendations)
+      );
     } catch (error) {
       console.error("Error fetching recommendations:", error);
     }
-    setRecommendations(JSON.parse(localStorage.getItem("recommendations") || '[]'));
+    setRecommendations(
+      JSON.parse(localStorage.getItem("recommendations") || "[]")
+    );
   };
 
   return (
     <Container className="discover">
-      <Button
-        onClick={() => getRecommendations(userListData?.userListData.movies || [])}
-      >
-        Get Recommendations
-      </Button>
-      {recommendations.length > 0 && recommendations.map((movie: Recommendation) => (
-        <Card key={movie.imdbID}>
-          <Card.Title>{movie.title}</Card.Title>
-          <Card.Text>{movie.year}</Card.Text>
-          <Button
-            onClick={() => {
-              navigate(`/movies/${movie.imdbID}`);
-            }}
-          >
-            View Details
-          </Button>
-        </Card>
-      ))}
       {movies.map((movies: MovieSearch) => (
         <Card key={movies.imdbID}>
           <Card.Img src={movies.Poster} alt={movies.Title} />
@@ -138,6 +111,34 @@ const Discover = () => {
             </Card>
           );
         })}
+      </Container>
+      <Container>
+        <h4>Recommended For You</h4>
+        {userListData?.userListData.movies.length === 0 ? (
+          null
+        ) : (
+          <Button
+          onClick={() =>
+            getRecommendations(userListData?.userListData.movies || [])
+          }
+        >
+          Get
+        </Button>
+        )}
+        {recommendations.length > 0 &&
+          recommendations.map((movie: Recommendation) => (
+            <Card key={movie.imdbID}>
+              <Card.Title>{movie.title}</Card.Title>
+              <Card.Text>{movie.year}</Card.Text>
+              <Button
+                onClick={() => {
+                  navigate(`/movies/${movie.imdbID}`);
+                }}
+              >
+                View Details
+              </Button>
+            </Card>
+          ))}
       </Container>
     </Container>
   );

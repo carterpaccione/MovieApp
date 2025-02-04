@@ -127,7 +127,7 @@ const MovieTable = (props: MovieTableProps) => {
                 <tr>
                   <th>Poster</th>
                   <th>Title</th>
-                  <th>Average Rating</th>
+                  <th>Average Score</th>
                   <th>Page</th>
                 </tr>
               </thead>
@@ -159,7 +159,7 @@ const MovieTable = (props: MovieTableProps) => {
                 <tr>
                   <th>Poster</th>
                   <th>Title</th>
-                  <th>Rating</th>
+                  <th>Score</th>
                   <th>Review</th>
                   <th>Page</th>
                 </tr>

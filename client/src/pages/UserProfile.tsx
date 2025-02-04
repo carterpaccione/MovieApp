@@ -122,7 +122,7 @@ const UserProfile = () => {
       await removeFriend({
         variables: { friendshipID: friendshipStatus?.friendshipStatus._id },
       });
-      friendshipStatusRefetch();
+      await friendshipStatusRefetch();
     } catch (error) {
       console.error("Error removing friend:", error);
     }

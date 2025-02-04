@@ -54,3 +54,20 @@ export interface IUserMovie {
     status: string;
     rating: IRating;
 }
+
+export interface SeenMovie {
+    movie: {
+      imdbID: string;
+      title: string;
+    };
+    rating: {
+      score: number;
+    };
+    status: string;
+  }
+  
+  export interface Recommendation {
+    title: string;
+    year: string;
+    imdbID: string;
+  }
