@@ -71,3 +71,20 @@ export const QUERY_USER_MOVIE_DATA = gql`
     }
   }
 `;
+
+export const QUERY_USER_LIST_DATA = gql`
+  query userListData {
+    userListData {
+      movies {
+        movie {
+          title
+          imdbID
+        }
+        status
+        rating {
+          score
+        }
+      }
+    }
+  }
+`;

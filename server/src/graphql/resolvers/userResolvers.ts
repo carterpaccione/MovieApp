@@ -44,8 +44,8 @@ export const UserResolvers = {
           },
           {
             path: "friends",
-            select: "username _id"
-          }
+            select: "username _id",
+          },
         ]);
         console.log("user:", user);
         return user;
@@ -74,8 +74,8 @@ export const UserResolvers = {
           },
           {
             path: "friends",
-            select: "username _id"
-          }
+            select: "username _id",
+          },
         ]);
         if (!user) {
           throw new Error("User not found.");
@@ -98,8 +98,7 @@ export const UserResolvers = {
         const userData = await User.findOne({
           _id: context.user._id,
           movies: { $elemMatch: { movie: movieID } },
-        })
-        .populate([
+        }).populate([
           {
             path: "movies",
             select: "movie status rating _id",
@@ -127,6 +126,36 @@ export const UserResolvers = {
       } catch (error) {
         console.error("Error fetching user movie data:", error);
         throw new Error("Could not fetch user movie data.");
+      }
+    },
+    userListData: async (_parent: any, _args: any, context: IApolloContext) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const user = await User.findOne({ _id: context.user._id }, { movies: { $elemMatch: { status: "SEEN" } } }).populate([
+          {
+            path: "movies",
+            select: "movie status rating",
+            populate: [
+              {
+                path: "movie",
+                select: "title imdbID",
+              },
+              {
+                path: "rating",
+                select: "score",
+              },
+            ],
+          },
+        ]);
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        return user;
+      } catch (error) {
+        console.error("Error fetching user:", error);
+        throw new Error("Could not fetch user.");
       }
     },
   },
@@ -268,7 +297,7 @@ export const UserResolvers = {
         //   }
         // }
         const updatedUser = await User.findOneAndUpdate(
-          {_id: user._id, "movies.movie": movieID},
+          { _id: user._id, "movies.movie": movieID },
           { $set: { "movies.$.status": "NONE" } },
           { runValidators: true, new: true }
         );

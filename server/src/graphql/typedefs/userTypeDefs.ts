@@ -29,6 +29,7 @@ export const userTypeDefs = gql`
     me: User
     userByID(userID: ID!): User
     userMovieData(movieID: ID!): UserMovie
+    userListData: User
   }
 
   type Mutation {
