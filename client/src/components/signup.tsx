@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import AuthService from "../utils/auth";
 import { ADD_USER } from "../utils/mutations/userMutations";
 
-import "../styles/launchForm.css";
+import "../styles/homeForm.css";
 
 const Login = () => {
   const [signUp] = useMutation(ADD_USER);
@@ -87,7 +87,9 @@ const Login = () => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button 
+      className="button"
+      variant="primary" type="submit">
         Submit
       </Button>
     </Form>

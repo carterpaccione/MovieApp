@@ -1,12 +1,37 @@
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+:root {
+    --color-primary: #768578;
+    --color-secondary: #748794;
+    --color-neutral-one: #CACCD0;
+    --color-neutral-two: #F4EEF1;
+    --color-accent: #C4A3AE;
+    --color-text-one: #373737;
+    --color-text-two: #40362C;
+}
+
+body {
+    background-color: var(--color-primary);
+    font-family: 'Roboto', sans-serif;
+    color: var(--color-neutral-two);
+}
+
+h1 {
+    color: var(--color-neutral-one);
 }
 
 h2 {
-    margin-bottom: 1rem;
-    color: aquamarine;
+    color: var(--color-primary);
+}
+
+.button {
+    background-color: var(--color-secondary);
+    color: var(--color-accent-dark);
+    width: max-content;
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: var(--color-accent-dark);
 }

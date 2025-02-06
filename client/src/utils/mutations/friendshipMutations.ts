@@ -57,9 +57,6 @@ export const DELETE_REQUEST = gql`
 
 export const REMOVE_FRIEND = gql`
   mutation removeFriend($friendshipID: ID!) {
-    removeFriend(friendshipID: $friendshipID) {
-      _id
-      username
-    }
+    removeFriend(friendshipID: $friendshipID)
   }
 `;

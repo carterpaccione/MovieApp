@@ -3,9 +3,10 @@ import { IUserMovie } from "../models/Movie.js";
 import { useNavigate } from "react-router-dom";
 
 import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Accordion from "react-bootstrap/Accordion";
 import Table from "react-bootstrap/Table";
-import Button from "react-bootstrap/Button";
 
 interface MovieTableProps {
   movies: IUserMovie[];
@@ -35,13 +36,10 @@ const MovieTable = (props: MovieTableProps) => {
         }
       } else if (movie.status === "SEEN") {
         SEEN.push(movie);
-        if (movie.rating.review !== "") {
+        if (movie.rating !== null && movie.rating.review !== "") {
           REVIEWS.push(movie);
         }
       }
-      console.log("WATCH LIST:", WATCH_LIST);
-      console.log("SEEN:", SEEN);
-      console.log("REVIEWS:", REVIEWS);
     });
     setWatchList(WATCH_LIST);
     setSeenList(SEEN);
@@ -49,39 +47,51 @@ const MovieTable = (props: MovieTableProps) => {
   };
 
   const renderWatchList = (watchList: IUserMovie[]) => {
-    console.log("RENDERWATCHLIST:", watchList);
     if (watchList.length === 0) {
-      return <tr>No movies in watch list</tr>;
+      return (
+        <tr>
+          <td>No movies in watch list</td>
+        </tr>
+      );
     }
     return watchList.map((userMovie: IUserMovie, index: number) => {
       return (
         <tr key={index}>
-          <td><img src={userMovie.movie.poster}></img></td>
+          <td>
+            <img
+              src={userMovie.movie.poster}
+              className="table-image"
+              onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}
+            ></img>
+          </td>
           <td>{userMovie.movie.title}</td>
           <td>{userMovie.movie.averageRating}</td>
-          <td>
-            <Button onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}>View</Button>
-          </td>
         </tr>
       );
     });
   };
 
   const renderSeenList = (seenList: IUserMovie[]) => {
-    console.log("RENDERSEENLIST:", seenList);
     if (seenList.length === 0) {
-      return <tr>No movies in seen list</tr>;
+      return (
+        <tr>
+          <td>No movies in seen list</td>
+        </tr>
+      );
     }
     return seenList.map((userMovie: IUserMovie, index: number) => {
       return (
         <tr key={index}>
-          <td><img src={userMovie.movie.poster}></img></td>
-          <td>{userMovie.movie.title}</td>
-          <td>{userMovie.rating.score}</td>
-          <td>{userMovie.rating.score}</td>
           <td>
-            <Button onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}>View</Button>
+            <img
+              src={userMovie.movie.poster}
+              className="table-image"
+              onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}
+            ></img>
           </td>
+          <td>{userMovie.movie.title}</td>
+          <td>{userMovie.rating ? userMovie.rating.score : null}</td>
+          <td>{userMovie.movie.averageRating}</td>
         </tr>
       );
     });
@@ -89,20 +99,25 @@ const MovieTable = (props: MovieTableProps) => {
 
   const renderReviews = (reviews: IUserMovie[]) => {
     if (reviews.length === 0) {
-      return <tr>No reviews</tr>;
+      return <Row>No reviews</Row>;
     }
     return reviews.map((userMovie: IUserMovie, index: number) => {
-      console.log("RENDERREVIEWS:", reviews);
       return (
-        <tr key={index}>
-          <td><img src={userMovie.movie.poster}></img></td>
-          <td>{userMovie.movie.title}</td>
-          <td>{userMovie.rating.score}</td>
-          <td>{userMovie.rating.review}</td>
-          <td>
-            <Button onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}>View</Button>
-          </td>
-        </tr>
+        <Row key={index} className="reviewContainer">
+          <Col>
+            <h5>{userMovie.movie.title}</h5>
+            <img
+              src={userMovie.movie.poster}
+              onClick={() => handleMovieNavigate(userMovie.movie.imdbID)}
+            ></img>
+          </Col>
+          <Col>
+            <Row>
+              <h5>Score: {userMovie.rating.score}</h5>
+            </Row>
+            <Row>{userMovie.rating.review}</Row>
+          </Col>
+        </Row>
       );
     });
   };
@@ -114,11 +129,9 @@ const MovieTable = (props: MovieTableProps) => {
     renderReviews(reviewList);
   }, [props.movies]);
 
-  console.log("MOVIE TABLE PROPS:", props);
-
   return (
     <Container>
-      <Accordion defaultActiveKey="0">
+      <Accordion className="accordian" defaultActiveKey="0">
         <Accordion.Item eventKey="0">
           <Accordion.Header>Watch List</Accordion.Header>
           <Accordion.Body>
@@ -128,7 +141,6 @@ const MovieTable = (props: MovieTableProps) => {
                   <th>Poster</th>
                   <th>Title</th>
                   <th>Average Score</th>
-                  <th>Page</th>
                 </tr>
               </thead>
               <tbody>{renderWatchList(watchList)}</tbody>
@@ -154,18 +166,7 @@ const MovieTable = (props: MovieTableProps) => {
         <Accordion.Item eventKey="2">
           <Accordion.Header>Reviews</Accordion.Header>
           <Accordion.Body>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>Poster</th>
-                  <th>Title</th>
-                  <th>Score</th>
-                  <th>Review</th>
-                  <th>Page</th>
-                </tr>
-              </thead>
-              <tbody>{renderReviews(reviewList)}</tbody>
-            </Table>
+            <Container>{renderReviews(reviewList)}</Container>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>

@@ -55,7 +55,9 @@ const Header = () => {
               setQuery(e.target.value);
             }}
           />
-          <Button onClick={() => handleSearch(query)}>Search</Button>
+          <Button 
+          className="button"
+          onClick={() => handleSearch(query)}>Search</Button>
         </Form>
         <Nav>
           <Nav.Link href="/discover">Discover</Nav.Link>

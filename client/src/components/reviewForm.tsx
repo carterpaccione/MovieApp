@@ -79,7 +79,7 @@ const ReviewForm = (props: ReviewFormProps) => {
           />
         </InputGroup>
         {error && <p className="text-danger">{error.message}</p>}
-        <Button type="submit">Submit</Button>
+        <Button className="button" type="submit">Submit</Button>
       </Col>
     </Form>
   );

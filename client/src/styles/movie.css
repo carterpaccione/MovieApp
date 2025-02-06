@@ -4,8 +4,6 @@
     justify-content: center;
     margin: 1rem;
     padding: 1rem;
-    border: 1px solid black;
-    border-radius: 1rem;
 }
 
 .movieTitle {
@@ -28,9 +26,20 @@
 .movieContainer button {
     margin: 1rem;
     padding: 0.5rem;
-    border: none;
+}
+
+.ratingCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 1rem;
+    padding: 1rem;
+    background-color: var(--color-neutral-two);
     border-radius: 0.5rem;
-    background-color: #f1356d;
-    color: white;
+}
+
+.ratingCard a {
     cursor: pointer;
+    text-decoration: none;
 }

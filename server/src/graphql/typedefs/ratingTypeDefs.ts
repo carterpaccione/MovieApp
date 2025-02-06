@@ -2,13 +2,15 @@ import { gql } from 'graphql-tag';
 
 export const ratingTypeDefs = gql`
 
+    scalar DateTime
+    
     type Rating {
         _id: ID!
         movie: Movie!
         user: User!
         score: Int!
         review: String
-        createdAt: String
+        createdAt: DateTime
     }
 
     input RateMovieInput {

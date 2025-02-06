@@ -130,7 +130,11 @@ const Movie = () => {
     }
   };
 
-  // Fetch movie data from OMDB API
+  // const formatDate = (date: string) => {
+  //   console.log("DATE:", date);
+  //   return new Date(date).toLocaleDateString();
+  // }
+
   useEffect(() => {
     const fetchPageMovieData = async () => {
       if (idParams.id) {
@@ -166,8 +170,10 @@ const Movie = () => {
       ) {
         setButtonState(
           <Col className="buttonContainer">
-            <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
-            <Button onClick={() => handleWatchListButton()}>
+            <Button className="button" onClick={() => handleSeenButton()}>
+              Mark Seen
+            </Button>
+            <Button className="button" onClick={() => handleWatchListButton()}>
               Add to Watchlist
             </Button>
           </Col>
@@ -178,15 +184,19 @@ const Movie = () => {
       if (userMovieData.userMovieData.status === "SEEN") {
         setButtonState(
           <Col className="buttonContainer">
-            <Button onClick={() => handleRemoveButton()}>Mark Unseen</Button>
+            <Button className="button" onClick={() => handleRemoveButton()}>
+              Mark Unseen
+            </Button>
           </Col>
         );
         return;
       } else if (userMovieData.userMovieData.status === "WATCH_LIST") {
         setButtonState(
           <Col className="buttonContainer">
-            <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
-            <Button onClick={() => handleRemoveButton()}>
+            <Button className="button" onClick={() => handleSeenButton()}>
+              Mark Seen
+            </Button>
+            <Button className="button" onClick={() => handleRemoveButton()}>
               Remove From WatchList
             </Button>
           </Col>
@@ -195,8 +205,10 @@ const Movie = () => {
       } else {
         setButtonState(
           <Col className="buttonContainer">
-            <Button onClick={() => handleSeenButton()}>Mark Seen</Button>
-            <Button onClick={() => handleWatchListButton()}>
+            <Button className="button" onClick={() => handleSeenButton()}>
+              Mark Seen
+            </Button>
+            <Button className="button" onClick={() => handleWatchListButton()}>
               Add to Watchlist
             </Button>
           </Col>
@@ -242,7 +254,8 @@ const Movie = () => {
           <Col>
             <h4>Plot:</h4>
             <p>{pageMovie?.Plot}</p>
-            <p>Average Rating: {dbMovie?.movie.averageRating}</p>
+            <p>Our Average Rating: {dbMovie?.movie.averageRating}</p>
+            <p>IMDB Rating: {pageMovie?.imdbRating}</p>
             <Row>
               <ReviewForm
                 movieID={reviewFormProps.movieID}
@@ -259,20 +272,26 @@ const Movie = () => {
           {dbMovie?.movie.ratings &&
             dbMovie.movie.ratings.map((rating: IRating) =>
               rating.review && rating.review.length > 0 ? (
-                <Card key={rating._id} style={{ width: "18rem" }}>
+                console.log(typeof rating.createdAt),
+                <Card key={rating._id} style={{ width: "18rem" }} className="ratingCard">
                   <Card.Body>
-                    <Card.Title>{rating.score}</Card.Title>
+                    <Card.Title>
+                      <Card.Link
+                        onClick={() => handleUserNavigate(rating.user._id)}
+                      >
+                        {rating.user.username}
+                      </Card.Link>
+                    </Card.Title>
+                    <Card.Title>Score: {rating.score}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
-                      {new Date(rating.createdAt).toLocaleString()}
+                      {new Date(rating.createdAt).toLocaleDateString()}
                     </Card.Subtitle>
                     <Card.Text>{rating.review}</Card.Text>
-                    <Card.Link
-                      onClick={() => handleUserNavigate(rating.user._id)}
-                    >
-                      {rating.user.username}
-                    </Card.Link>
                     {rating.user._id === userInfo._id ? (
-                      <Button onClick={() => handleDeleteRating(rating._id)}>
+                      <Button
+                        className="button"
+                        onClick={() => handleDeleteRating(rating._id)}
+                      >
                         Delete
                       </Button>
                     ) : null}

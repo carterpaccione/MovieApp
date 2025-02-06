@@ -32,7 +32,7 @@ export const FriendshipResolvers = {
         ]);
         if (!friendship) {
           console.log("No friendship found.");
-          throw new Error("No friendship found.");
+          return null;
         }
         console.log("FRIENDSHIP:", friendship);
         return friendship;
@@ -41,6 +41,30 @@ export const FriendshipResolvers = {
         throw new Error("Could not Friendship Status.");
       }
     },
+    incomingRequests: async (_parent: any, _args: any, context: IApolloContext) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const requests = await Friendship.find({ recipient: context.user._id, status: "PENDING" });
+        return await Promise.all(
+          requests.map(request => request.populate([
+            {
+              path: "requester",
+              select: "username _id",
+            },
+            {
+              path: "recipient",
+              select: "username _id",
+            },
+            "status",
+          ]))
+        );
+      } catch (error) {
+        console.error("Error fetching incoming requests:", error);
+        throw new Error("Could not fetch incoming requests.");
+      }
+    }
   },
   Mutation: {
     addFriend: async (
@@ -185,7 +209,7 @@ export const FriendshipResolvers = {
         if (!updatedUserTwo) {
           throw new Error("UserTwo not found.");
         }
-        return context.user;
+        return friendship._id;
       } catch (error) {
         console.error("Error removing friend:", error);
         throw new Error("Could not remove friend.");

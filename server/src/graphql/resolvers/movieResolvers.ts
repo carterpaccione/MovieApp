@@ -1,3 +1,5 @@
+import { GraphQLDateTime } from "graphql-scalars";
+
 import Movie from "../../models/Movie.js";
 
 interface saveMovieToDBInput {
@@ -9,6 +11,7 @@ interface saveMovieToDBInput {
 }
 
 export const MovieResolvers = {
+  DateTime: GraphQLDateTime,
   Query: {
     movie: async (_parent: any, { imdbID }: { imdbID: string }) => {
       try {
@@ -25,6 +28,7 @@ export const MovieResolvers = {
         if (!movie) {
           throw new Error("Movie not found.");
         }
+        console.log("Type of createdAt:", typeof movie.ratings[0].createdAt);
         movie.calculateAverageRating();
         return movie;
       } catch (error) {

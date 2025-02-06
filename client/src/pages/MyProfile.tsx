@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -10,13 +10,19 @@ import Button from "react-bootstrap/Button";
 import "../styles/myProfile.css";
 
 import { Recommendation } from "../models/Movie.js";
+import { IFriendship } from "../models/Friendship.js";
 
 import MovieTable from "../components/movieTable.js";
 
 import { QUERY_ME } from "../utils/queries/userQueries.js";
+import { QUERY_INCOMING_REQUESTS } from "../utils/queries/friendshipQueries.js";
 
 const MyProfile = () => {
   const { data, loading, error } = useQuery(QUERY_ME);
+
+  const { data: requestsData, loading: requestsLoading, error: requestsError } = useQuery(QUERY_INCOMING_REQUESTS);
+
+  const [incomingRequests, setIncomingRequests] = useState<IFriendship[]>([]);
 
   const localRecs = localStorage.getItem("recommendations");
   if (!localRecs) {
@@ -26,6 +32,13 @@ const MyProfile = () => {
   const [recommendations] = useState<Recommendation[]>(
     JSON.parse(localRecs || "[]")
   );
+
+  useEffect(() => {
+    if (requestsData) {
+      console.log("Incoming Requests:", requestsData.incomingRequests);
+      setIncomingRequests(requestsData.incomingRequests);
+    }
+  }, [requestsData])
 
   const navigate = useNavigate();
 
@@ -43,7 +56,7 @@ const MyProfile = () => {
 
   return (
     <Container>
-      <Row>
+      <Row className="justify-content-md-center text-center">
           <h3>{data.me.username}'s Profile</h3>
       </Row>
       <Row>
@@ -54,7 +67,7 @@ const MyProfile = () => {
               <Card style={{ width: "18rem" }} key={index}>
                 <Card.Body>
                   <Card.Title>{movie.title}</Card.Title>
-                  <Button onClick={() => handleMovieNavigate(movie.imdbID)}>
+                  <Button className="button" onClick={() => handleMovieNavigate(movie.imdbID)}>
                     View
                   </Button>
                 </Card.Body>
@@ -81,6 +94,22 @@ const MyProfile = () => {
             ))
           ) : (
             <p>No Friends Yet</p>
+          )}
+          <h3>Requests</h3>
+          {requestsLoading && <p>Loading...</p>}
+          {requestsError && <p>Error!</p>}
+          {incomingRequests && incomingRequests.length > 0 ? (
+            incomingRequests.map((request: IFriendship, index: number) => (
+              <Card style={{ width: "18rem" }} key={index}>
+                <Card.Body>
+                  <Card.Title onClick={() => handleUserNavigate(request.requester._id)}>
+                    {request.requester.username}
+                  </Card.Title>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <p>No Requests</p>
           )}
         </Col>
       </Row>

@@ -17,6 +17,7 @@ export const friendshipTypeDefs = gql`
 
     type Query {
         friendshipStatus(userID: ID!): Friendship
+        incomingRequests: [Friendship]
     }
 
     type Mutation {
@@ -24,6 +25,6 @@ export const friendshipTypeDefs = gql`
         acceptFriend(friendshipID: ID!): Friendship
         rejectFriend(friendshipID: ID!): Friendship
         deleteRequest(friendshipID: ID!): ID
-        removeFriend(friendshipID: ID!): User
+        removeFriend(friendshipID: ID!): ID
     }
 `;

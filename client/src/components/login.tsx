@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/client";
 import { LOGIN } from "../utils/mutations/userMutations";
 import AuthService from "../utils/auth";
 
-import "../styles/launchForm.css";
+import "../styles/homeForm.css";
 
 const Login = () => {
   const [login] = useMutation(LOGIN);
@@ -27,7 +27,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await login({ variables: { input: loginForm } });
-      console.log(data.login.user)
+      console.log(data.login.user);
       AuthService.login(data.login.token, { ...data.login.user });
     } catch (error: any) {
       console.log(error.message);
@@ -56,7 +56,7 @@ const Login = () => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button className="button" type="submit">
         Submit
       </Button>
     </Form>

@@ -46,12 +46,6 @@ const UserProfile = () => {
   const navigate = useNavigate();
   const handleUserNavigate = (userID: string) => {
     let myInfo = JSON.parse(localStorage.getItem("user") || "{}");
-    console.log(
-      "LocalStorage ID: ",
-      myInfo._id.trim(),
-      "UserID: ",
-      userID.trim()
-    );
     if (myInfo._id === userID) {
       navigate(`/me`);
     } else {
@@ -59,20 +53,15 @@ const UserProfile = () => {
     }
   };
 
-  useEffect(() => {
-    userDataRefetch();
-    friendshipStatusRefetch();
-  }, [idParams.userID, friendshipStatus]);
-
   const handleAddButton = async () => {
     try {
       await addFriend({
         variables: { recipientID: idParams.userID },
       });
-      friendshipStatusRefetch();
     } catch (error) {
       console.error("Error adding friend:", error);
     }
+    friendshipStatusRefetch();
   };
 
   const handleAcceptButton = async () => {
@@ -80,10 +69,10 @@ const UserProfile = () => {
       await acceptFriend({
         variables: { friendshipID: friendshipStatus?.friendshipStatus._id },
       });
-      friendshipStatusRefetch();
     } catch (error) {
       console.error("Error accepting friend:", error);
     }
+    friendshipStatusRefetch();
   };
 
   const handleRejectButton = async () => {
@@ -91,30 +80,21 @@ const UserProfile = () => {
       await rejectFriend({
         variables: { friendshipID: friendshipStatus?.friendshipStatus._id },
       });
-      friendshipStatusRefetch();
     } catch (error) {
       console.error("Error rejecting friend:", error);
     }
+    friendshipStatusRefetch();
   };
 
   const handleDeleteRequestButton = async () => {
     try {
       await deleteRequest({
         variables: { friendshipID: friendshipStatus?.friendshipStatus._id },
-        update(cache) {
-          cache.modify({
-            fields: {
-              friendshipStatus() {
-                return null;
-              },
-            },
-          });
-        },
       });
     } catch (error) {
       console.error("Error deleting request:", error);
     }
-    await friendshipStatusRefetch();
+    friendshipStatusRefetch();
   };
 
   const handleRemoveButton = async () => {
@@ -122,33 +102,59 @@ const UserProfile = () => {
       await removeFriend({
         variables: { friendshipID: friendshipStatus?.friendshipStatus._id },
       });
-      await friendshipStatusRefetch();
+      await userDataRefetch();
     } catch (error) {
       console.error("Error removing friend:", error);
     }
+    await friendshipStatusRefetch();
   };
 
   const checkFriendshipStatus = () => {
-    if (!friendshipStatus || !friendshipStatus.friendshipStatus) {
-      return <Button onClick={handleAddButton}>+ Friend</Button>;
+    if (
+      !friendshipStatus ||
+      !friendshipStatus.friendshipStatus ||
+      friendshipStatus.friendshipStatus == null
+    ) {
+      return (
+        <Button className="button" onClick={handleAddButton}>
+          + Friend
+        </Button>
+      );
     }
 
     const { status, recipient } = friendshipStatus.friendshipStatus;
 
     if (status === "PENDING" && recipient._id === idParams.userID) {
-      return <Button onClick={handleDeleteRequestButton}>- Request</Button>;
+      return (
+        <Button className="button" onClick={handleDeleteRequestButton}>
+          - Request
+        </Button>
+      );
     }
 
     if (status === "PENDING" && recipient._id !== idParams.userID) {
       return (
         <>
-          <Button onClick={handleAcceptButton}>Accept</Button>
-          <Button onClick={handleRejectButton}>Reject</Button>
+          <Button className="button" onClick={handleAcceptButton}>
+            Accept
+          </Button>
+          <Button className="button" onClick={handleRejectButton}>
+            Reject
+          </Button>
         </>
       );
     }
-    return <Button onClick={handleRemoveButton}>Remove Friend</Button>;
+    return (
+      <Button className="button" onClick={handleRemoveButton}>
+        Remove Friend
+      </Button>
+    );
   };
+
+  useEffect(() => {
+    userDataRefetch();
+    friendshipStatusRefetch();
+  }, [idParams.userID, friendshipStatus]);
 
   if (userDataLoading) return <div>Loading...</div>;
   if (userDataError) return <div>Error!</div>;
@@ -157,21 +163,29 @@ const UserProfile = () => {
 
   return (
     <Container>
-      <h3>{userData.userByID.username}'s Profile</h3>
-      {checkFriendshipStatus()}
-      <MovieTable movies={userData.userByID.movies} />
+      <Row className="justify-content-md-center text-center">
+        <h3>{userData.userByID.username}'s Profile</h3>
+        {checkFriendshipStatus()}
+      </Row>
       <Row>
         <Col>
+          <MovieTable movies={userData.userByID.movies} />
+        </Col>
+        <Col id="friends-container">
           <h3>FriendsList</h3>
-          {userData.userByID.friends.map((friend: any, index: number) => (
-            <Card style={{ width: "18rem" }} key={index}>
-              <Card.Body>
-                <Card.Title onClick={() => handleUserNavigate(friend._id)}>
-                  {friend.username}
-                </Card.Title>
-              </Card.Body>
-            </Card>
-          ))}
+          {userData.userByID.friends.length > 0 ? (
+            userData.userByID.friends.map((friend: any, index: number) => (
+              <Card style={{ width: "18rem" }} key={index}>
+                <Card.Body>
+                  <Card.Title onClick={() => handleUserNavigate(friend._id)}>
+                    {friend.username}
+                  </Card.Title>
+                </Card.Body>
+              </Card>
+            ))
+          ) : (
+            <p>No Friends Yet.</p>
+          )}
         </Col>
       </Row>
     </Container>

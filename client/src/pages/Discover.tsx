@@ -93,6 +93,7 @@ const Discover = () => {
             <Card.Title>{movies.Title}</Card.Title>
             <Card.Text>{movies.Year}</Card.Text>
             <Button
+              className="button"
               onClick={() => {
                 navigate(`/movies/${movies.imdbID}`);
               }}
@@ -111,6 +112,7 @@ const Discover = () => {
               <Card.Title>{movie.title}</Card.Title>
               <Card.Text>{movie.averageRating}</Card.Text>
               <Button
+                className="button"
                 onClick={() => {
                   navigate(`/movies/${movie.imdbID}`);
                 }}
@@ -126,6 +128,7 @@ const Discover = () => {
           <h4>Recommended For You</h4>
           {userListData?.userListData.movies.length === 0 ? null : (
             <Button
+              className="button"
               onClick={() =>
                 getRecommendations(userListData?.userListData.movies || [])
               }
@@ -142,6 +145,7 @@ const Discover = () => {
                   <Card.Title>{movie.title}</Card.Title>
                   <Card.Text>{movie.year}</Card.Text>
                   <Button
+                    className="button"
                     onClick={() => {
                       navigate(`/movies/${movie.imdbID}`);
                     }}

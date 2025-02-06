@@ -5,8 +5,10 @@ export const userTypeDefs = gql`
     _id: ID!
     username: String!
     email: String!
+    password: String!
     movies: [UserMovie]
     friends: [User]
+    createdAt: DateTime
   }
 
   type Auth {
