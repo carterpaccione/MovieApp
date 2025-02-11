@@ -22,10 +22,14 @@ import {
 } from "../utils/queries/userQueries";
 import { SET_RECOMMENDATIONS } from "../utils/mutations/userMutations";
 import { fetchMovieByID } from "../utils/helper";
+import { ImportMeta } from '../components/header.js';
+
+
 
 const Discover = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const apiURL = (import.meta as unknown as ImportMeta).env.VITE_API_BASE_URL;
   const movies = location.state?.movies || [];
 
   const { data: topMoviesData } = useQuery<{ topMovies: IMovie[] }>(
@@ -35,7 +39,6 @@ const Discover = () => {
   const { data: userListData } = useQuery<{
     userListData: { movies: SeenMovie[] };
   }>(QUERY_USER_LIST_DATA);
-  console.log("User List Data: ", userListData);
 
   const [saveRecommendations] = useMutation(SET_RECOMMENDATIONS);
   const { data: recommendationData, refetch: refetchRecommendations } =
@@ -49,7 +52,6 @@ const Discover = () => {
     if (userMovies.length === 0) {
       return;
     }
-    console.log("User Movies: ", userMovies);
     const cleanedMovies = userMovies.map((movie: SeenMovie) => ({
       movie: {
         title: movie.movie.title,
@@ -62,7 +64,7 @@ const Discover = () => {
     }));
 
     try {
-      const response = await fetch("http://localhost:3001/api/recommend", {
+      const response = await fetch(`${apiURL}/api/recommend`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +80,7 @@ const Discover = () => {
         : [];
 
       if (recs.length === 0) {
-        console.log("No recommendations found");
+        console.error("No recommendations found");
         return;
       }
       const recArray: MovieSearch[] = await Promise.all(
@@ -93,7 +95,6 @@ const Discover = () => {
           };
         })
       );
-      console.log("Rec Array: ", recArray);
       await saveRecommendations({ variables: { input: { movies: recArray } } });
       await refetchRecommendations();
     } catch (error) {

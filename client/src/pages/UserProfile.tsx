@@ -158,8 +158,6 @@ const UserProfile = () => {
 
   if (userDataLoading) return <div>Loading...</div>;
   if (userDataError) return <div>Error!</div>;
-  console.log("userData: ", userData);
-  console.log("friendshipStatus: ", friendshipStatus);
 
   return (
     <Container className="page-container">

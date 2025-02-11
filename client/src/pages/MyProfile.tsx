@@ -26,7 +26,6 @@ const MyProfile = () => {
 
   useEffect(() => {
     if (requestsData) {
-      console.log("Incoming Requests:", requestsData.incomingRequests);
       setIncomingRequests(requestsData.incomingRequests);
     }
   }, [requestsData])
@@ -43,8 +42,7 @@ const MyProfile = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error!</div>;
-  console.log("Data:", data);
-
+  
   return (
     <Container className="page-container">
       <Row>

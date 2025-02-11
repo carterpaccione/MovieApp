@@ -119,7 +119,6 @@ const Movie = () => {
   };
 
   const handleDeleteRating = async (ratingID: string) => {
-    console.log("DELETED RATING ID:", ratingID);
     try {
       await deleteRating({
         variables: { ratingID: ratingID },
@@ -139,9 +138,6 @@ const Movie = () => {
   }, [idParams.id]);
 
   useEffect(() => {
-    console.log("User Movie Data:", userMovieData);
-    console.log("Page Movie:", pageMovie);
-    console.log("DB Movie:", dbMovie);
     const updateButtonState = () => {
       if (
         !userMovieData ||
@@ -252,7 +248,6 @@ const Movie = () => {
           {dbMovie?.movie.ratings &&
             dbMovie.movie.ratings.map((rating: IRating) =>
               rating.review && rating.review.length > 0 ? (
-                console.log(typeof rating.createdAt),
                 <Card key={rating._id} style={{ width: "18rem" }} className="ratingCard">
                   <Card.Body>
                     <Card.Title>

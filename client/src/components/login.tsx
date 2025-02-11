@@ -27,10 +27,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const { data } = await login({ variables: { input: loginForm } });
-      console.log(data.login.user);
       AuthService.login(data.login.token, { ...data.login.user });
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

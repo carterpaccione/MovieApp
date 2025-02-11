@@ -28,7 +28,7 @@ const Login = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (signUpForm.password !== signUpForm.confirmPassword) {
-      console.log("Passwords do not match.");
+      console.error("Passwords do not match.");
       return;
     }
     const input = { 
@@ -38,10 +38,9 @@ const Login = () => {
     }
     try {
       const { data } = await signUp({ variables: { input: input } });
-      console.log(data.addUser.user);
       AuthService.login(data.addUser.token, { ...data.addUser.user });
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
     }
   };
 

@@ -10,9 +10,9 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import "../styles/header.css";
 
-interface ImportMeta {
+export interface ImportMeta {
   env: {
-    REACT_APP_API_URL: string;
+    VITE_API_BASE_URL: string;
   };
 }
 
@@ -21,14 +21,13 @@ const Header = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  const apiURL = (import.meta as unknown as ImportMeta).env.REACT_APP_API_URL;
-  console.log("API URL:", apiURL);
+  const apiURL = (import.meta as unknown as ImportMeta).env.VITE_API_BASE_URL;
 
   const handleSearch = async (query: string) => {
     const mutatedQuery = query.split(" ").join("+");
     try {
       const response = await fetch(
-        `http://localhost:3001/api/movies/search?query=${mutatedQuery}`
+        `${apiURL}/api/movies/search?query=${mutatedQuery}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");

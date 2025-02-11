@@ -48,7 +48,6 @@ const ReviewForm = (props: ReviewFormProps) => {
           },
         },
       });
-      console.log(result);
       props.handleDBMovieRefetch();
       props.handleUserMovieRefetch();
     } catch (error) {

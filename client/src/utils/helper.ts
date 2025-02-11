@@ -1,6 +1,10 @@
+import { ImportMeta } from '../components/header.js';
+
+const apiURL = (import.meta as unknown as ImportMeta).env.VITE_API_BASE_URL;
+
 export const fetchMovieByID = async (imdbID: string) => {
   try {
-    const response = await fetch(`http://localhost:3001/api/movies/${imdbID}`);
+    const response = await fetch(`${apiURL}/api/movies/${imdbID}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
