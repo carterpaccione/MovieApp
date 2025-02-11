@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/client";
 import {
   MovieSearch,
   IMovie,
@@ -16,32 +16,34 @@ import Button from "react-bootstrap/Button";
 
 import "../styles/discover.css";
 import { QUERY_TOP_MOVIES } from "../utils/queries/movieQueries";
-import { QUERY_USER_LIST_DATA } from "../utils/queries/userQueries";
+import {
+  QUERY_USER_LIST_DATA,
+  QUERY_USER_RECOMMENDATIONS,
+} from "../utils/queries/userQueries";
+import { SET_RECOMMENDATIONS } from "../utils/mutations/userMutations";
+import { fetchMovieByID } from "../utils/helper";
 
 const Discover = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const movies = location.state?.movies || [];
 
-  const localRecs = localStorage.getItem("recommendations");
-  if (!localRecs) {
-    localStorage.setItem("recommendations", JSON.stringify([]));
-  }
-
   const { data: topMoviesData } = useQuery<{ topMovies: IMovie[] }>(
     QUERY_TOP_MOVIES
   );
-  console.log("Top Movies Data: ", topMoviesData);
 
   const { data: userListData } = useQuery<{
     userListData: { movies: SeenMovie[] };
   }>(QUERY_USER_LIST_DATA);
-  console.log("User List Data: ", userListData?.userListData);
+  console.log("User List Data: ", userListData);
 
-  const [recommendations, setRecommendations] = useState<Recommendation[]>(
-    JSON.parse(localRecs || "[]")
-  );
-  console.log("Recommendations: ", recommendations);
+  const [saveRecommendations] = useMutation(SET_RECOMMENDATIONS);
+  const { data: recommendationData, refetch: refetchRecommendations } =
+    useQuery<{
+      userRecommendations: { recommendedMovies: MovieSearch[] };
+    }>(QUERY_USER_RECOMMENDATIONS);
+
+  const [recommendations, setRecommendations] = useState<MovieSearch[]>([]);
 
   const getRecommendations = async (userMovies: SeenMovie[]) => {
     if (userMovies.length === 0) {
@@ -71,31 +73,74 @@ const Discover = () => {
         throw new Error("Failed to fetch recommendations");
       }
       const data = await response.json();
-      console.log("Data: ", data);
-      localStorage.setItem(
-        "recommendations",
-        JSON.stringify(data.parsedResponse.recommendations)
+      const recs = Array.isArray(data.parsedResponse?.recommendations)
+        ? data.parsedResponse?.recommendations
+        : [];
+
+      if (recs.length === 0) {
+        console.log("No recommendations found");
+        return;
+      }
+      const recArray: MovieSearch[] = await Promise.all(
+        recs.map(async (rec: Recommendation) => {
+          const movie = await fetchMovieByID(rec.imdbID);
+          return {
+            Title: movie.Title,
+            Year: movie.Year,
+            imdbID: movie.imdbID,
+            Type: movie.Type,
+            Poster: movie.Poster,
+          };
+        })
       );
+      console.log("Rec Array: ", recArray);
+      await saveRecommendations({ variables: { input: { movies: recArray } } });
+      await refetchRecommendations();
     } catch (error) {
       console.error("Error fetching recommendations:", error);
     }
-    setRecommendations(
-      JSON.parse(localStorage.getItem("recommendations") || "[]")
-    );
   };
+
+  const renderRecommendations = (data: MovieSearch[]) => {
+    if (data.length === 0) {
+      return <div>No recommendations found</div>;
+    }
+    return data.map((movie: MovieSearch) => (
+      <Card className="movie-card" key={`rec-${movie.imdbID}`}>
+        <Card.Img src={movie.Poster} alt={movie.Title} />
+        <Card.Title className="movie-card-text">{movie.Title}</Card.Title>
+        <Card.Text className="movie-card-text">{movie.Year}</Card.Text>
+        <Button
+          className="button"
+          onClick={() => {
+            navigate(`/movies/${movie.imdbID}`);
+          }}
+        >
+          View Details
+        </Button>
+      </Card>
+    ));
+  }
+
+  useEffect(() => {
+    if (recommendationData) {
+      setRecommendations(recommendationData.userRecommendations.recommendedMovies);
+      renderRecommendations(recommendations);
+    }
+  },[recommendationData])
 
   return (
     <Container>
-      <Row>
-        {movies.map((movies: MovieSearch) => (
-          <Card key={movies.imdbID}>
-            <Card.Img src={movies.Poster} alt={movies.Title} />
-            <Card.Title>{movies.Title}</Card.Title>
-            <Card.Text>{movies.Year}</Card.Text>
+      <Row className="movies-container">
+        {movies.map((movie: MovieSearch) => (
+          <Card className="movie-card" key={`search-${movie.imdbID}`}>
+            <Card.Img src={movie.Poster} alt={movie.Title} />
+            <Card.Title className="movie-card-text">{movie.Title}</Card.Title>
+            <Card.Text className="movie-card-text">{movie.Year}</Card.Text>
             <Button
-              className="button"
+              className="button movie-card-button"
               onClick={() => {
-                navigate(`/movies/${movies.imdbID}`);
+                navigate(`/movies/${movie.imdbID}`);
               }}
             >
               View Details
@@ -103,14 +148,16 @@ const Discover = () => {
           </Card>
         ))}
       </Row>
-      <Row>
+      <Row className="movies-container">
         <h4>Top 5</h4>
         {topMoviesData?.topMovies.map((movie) => {
           return (
-            <Card key={movie.imdbID}>
+            <Card className="movie-card" key={`top-${movie.imdbID}`}>
               <Card.Img id="card-image" src={movie.poster} alt={movie.title} />
-              <Card.Title>{movie.title}</Card.Title>
-              <Card.Text>{movie.averageRating}</Card.Text>
+              <Card.Title className="movie-card-text">{movie.title}</Card.Title>
+              <Card.Text className="movie-card-text">
+                {movie.averageRating}
+              </Card.Text>
               <Button
                 className="button"
                 onClick={() => {
@@ -123,7 +170,7 @@ const Discover = () => {
           );
         })}
       </Row>
-      <Row>
+      <Row className="movies-container">
         <Col sm={2}>
           <h4>Recommended For You</h4>
           {userListData?.userListData.movies.length === 0 ? null : (
@@ -139,21 +186,7 @@ const Discover = () => {
         </Col>
         <Col sm={10}>
           <Row>
-            {recommendations.length > 0 &&
-              recommendations.map((movie: Recommendation) => (
-                <Card key={movie.imdbID}>
-                  <Card.Title>{movie.title}</Card.Title>
-                  <Card.Text>{movie.year}</Card.Text>
-                  <Button
-                    className="button"
-                    onClick={() => {
-                      navigate(`/movies/${movie.imdbID}`);
-                    }}
-                  >
-                    View Details
-                  </Button>
-                </Card>
-              ))}
+              {renderRecommendations(recommendations)}
           </Row>
         </Col>
       </Row>

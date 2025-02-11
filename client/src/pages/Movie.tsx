@@ -22,6 +22,7 @@ import {
   REMOVE_FROM_USER,
 } from "../utils/mutations/userMutations";
 import { DELETE_RATING } from "../utils/mutations/ratingMutations.js";
+import { fetchMovieByID } from "../utils/helper";
 
 const Movie = () => {
   const idParams = useParams<{ id: string }>();
@@ -130,31 +131,10 @@ const Movie = () => {
     }
   };
 
-  // const formatDate = (date: string) => {
-  //   console.log("DATE:", date);
-  //   return new Date(date).toLocaleDateString();
-  // }
-
   useEffect(() => {
-    const fetchPageMovieData = async () => {
-      if (idParams.id) {
-        try {
-          const response = await fetch(
-            `http://localhost:3001/api/movies/${idParams.id}`
-          );
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          const data = await response.json();
-          setPageMovie(data);
-        } catch (error: any) {
-          console.error("Error fetching data:", error);
-        }
-      }
-    };
-
     if (idParams.id) {
-      fetchPageMovieData();
+      fetchMovieByID(idParams.id)
+      .then((data) => setPageMovie(data));
     }
   }, [idParams.id]);
 

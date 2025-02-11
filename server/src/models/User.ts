@@ -1,6 +1,7 @@
 import { Schema, model, type Document } from "mongoose";
 import bcrypt from "bcrypt";
 import { IUserMovie, userMovieSchema } from './UserMovie.js'
+import { IMovieSearch, movieSearchSchema } from "./MovieSearch.js";
 
 export interface IUser extends Document {
   _id: string;
@@ -10,8 +11,8 @@ export interface IUser extends Document {
   isCorrectPassword(password: string): Promise<boolean>;
   
   movies: IUserMovie[]
+  recommendedMovies?: IMovieSearch[];
   friends?: IUser[];
-  createdAt: Date;
 }
 
 export const userSchema: Schema<IUser> = new Schema({
@@ -34,16 +35,13 @@ export const userSchema: Schema<IUser> = new Schema({
     minlength: 8,
   },
   movies: [userMovieSchema],
+  recommendedMovies: [movieSearchSchema],
   friends: [
     {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
 });
 
 userSchema.pre("save", async function (next) {

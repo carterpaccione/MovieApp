@@ -23,6 +23,27 @@ export const QUERY_ME = gql`
         _id
         username
       }
+      recommendedMovies {
+        imdbID
+        Title
+        Year
+        Type
+        Poster
+      }
+    }
+  }
+`;
+
+export const QUERY_USER_RECOMMENDATIONS = gql`
+  query userRecommendations {
+    userRecommendations {
+      recommendedMovies {
+        imdbID
+        Title
+        Year
+        Type
+        Poster
+      }
     }
   }
 `;

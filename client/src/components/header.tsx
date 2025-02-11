@@ -60,14 +60,14 @@ const Header = () => {
           onClick={() => handleSearch(query)}>Search</Button>
         </Form>
         <Nav>
-          <Nav.Link href="/discover">Discover</Nav.Link>
-          {token ? <Nav.Link href="/me">My Profile</Nav.Link> : null}
+          <Nav.Link href="/discover" className="nav-item">Discover</Nav.Link>
+          {token ? <Nav.Link href="/me" className="nav-item">My Profile</Nav.Link> : null}
           {token ? (
-            <Nav.Link href="/" onClick={AuthService.logout}>
+            <Nav.Link href="/" className="nav-item" onClick={AuthService.logout}>
               Logout
             </Nav.Link>
           ) : (
-            <Nav.Link href="/">Login / Sign Up</Nav.Link>
+            <Nav.Link href="/" className="nav-item">Login / Sign Up</Nav.Link>
           )}
         </Nav>
       </Container>

@@ -1,4 +1,5 @@
-import { IUserMovie } from "./UserMovie";
+import { IUserMovie } from "./UserMovie.js";
+import { MovieSearch } from "./Movie.js";
 
 export interface IUser {
     _id: string;
@@ -8,6 +9,7 @@ export interface IUser {
     isCorrectPassword(password: string): Promise<boolean>;
     
     movies: IUserMovie[]
+    recommendedMovies: MovieSearch[];
     friends?: IUser[];
     createdAt: Date;
 }

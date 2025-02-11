@@ -162,7 +162,7 @@ const UserProfile = () => {
   console.log("friendshipStatus: ", friendshipStatus);
 
   return (
-    <Container>
+    <Container id="profile-container">
       <Row className="justify-content-md-center text-center">
         <h3>{userData.userByID.username}'s Profile</h3>
         {checkFriendshipStatus()}
@@ -175,7 +175,7 @@ const UserProfile = () => {
           <h3>FriendsList</h3>
           {userData.userByID.friends.length > 0 ? (
             userData.userByID.friends.map((friend: any, index: number) => (
-              <Card style={{ width: "18rem" }} key={index}>
+              <Card className="friend-card" key={index}>
                 <Card.Body>
                   <Card.Title onClick={() => handleUserNavigate(friend._id)}>
                     {friend.username}

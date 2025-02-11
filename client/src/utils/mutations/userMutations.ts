@@ -79,3 +79,28 @@ export const REMOVE_FROM_USER = gql`
     }
   }
 `;
+
+export const SET_RECOMMENDATIONS = gql`
+  mutation setRecommendations($input: SetRecsInputWrapper!) {
+    setRecommendations(input: $input) {
+      _id
+      username
+      email
+      movies {
+        movie {
+          _id
+          title
+          imdbID
+        }
+        status
+      }
+      recommendedMovies {
+        imdbID
+        Title
+        Year
+        Type
+        Poster
+      }
+    }
+  }
+`;

@@ -4,6 +4,7 @@ import {
   IApolloContext,
 } from "../../utils/auth.js";
 import User from "../../models/User.js";
+import { IMovieSearch } from "../../models/MovieSearch.js";
 
 interface NewUserInput {
   input: {
@@ -22,6 +23,12 @@ interface LoginUserInput {
 
 interface UserMovieArgs {
   movieID: string;
+}
+
+interface SetRecsInput {
+  input: {
+    movies: IMovieSearch[];
+  };
 }
 
 export const UserResolvers = {
@@ -44,6 +51,10 @@ export const UserResolvers = {
             path: "friends",
             select: "username _id",
           },
+          {
+            path: "recommendedMovies",
+            select: "Title Year imdbID Type Poster",
+          }
         ]);
         console.log("user:", user);
         return user;
@@ -156,6 +167,30 @@ export const UserResolvers = {
       } catch (error) {
         console.error("Error fetching user:", error);
         throw new Error("Could not fetch user.");
+      }
+    },
+    userRecommendations: async (
+      _parent: any,
+      _args: any,
+      context: IApolloContext
+    ) => {
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const user = await User.findOne({ _id: context.user._id }).populate([
+          {
+            path: "recommendedMovies",
+            select: "Title Year imdbID Type Poster",
+          },
+        ]);
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        return user;
+      } catch (error: any) {
+        console.error("Error fetching user recommendations:", error);
+        throw new Error("Could not fetch user recommendations.");
       }
     },
   },
@@ -305,6 +340,31 @@ export const UserResolvers = {
       } catch (error) {
         console.error("Error removing movie from user:", error);
         throw new Error("Could not remove movie from user.");
+      }
+    },
+    setRecommendations: async (
+      _parent: any,
+      { input }: SetRecsInput,
+      context: IApolloContext
+    ) => {
+      console.log("Input:", input);
+      if (!context.user) {
+        throw new AuthenticationError("Not logged in.");
+      }
+      try {
+        const user = await User.findOne({ _id: context.user._id });
+        if (!user) {
+          throw new Error("User not found.");
+        }
+        const updatedUser = await User.findByIdAndUpdate(
+          { _id: user._id },
+          { $set: { recommendedMovies: input.movies } },
+          { runValidators: true, new: true }
+        );
+        return updatedUser;
+      } catch (error) {
+        console.error("Error setting recommendations for user:", error);
+        throw new Error("Could not set recommendations for user.");
       }
     },
   },

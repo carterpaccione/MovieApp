@@ -28,7 +28,6 @@ export const MovieResolvers = {
         if (!movie) {
           throw new Error("Movie not found.");
         }
-        console.log("Type of createdAt:", typeof movie.ratings[0].createdAt);
         movie.calculateAverageRating();
         return movie;
       } catch (error) {
