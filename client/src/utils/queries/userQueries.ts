@@ -109,3 +109,12 @@ export const QUERY_USER_LIST_DATA = gql`
     }
   }
 `;
+
+export const SEARCH_USERS = gql`
+  query searchUsers($query: String!) {
+    searchUsers(query: $query) {
+      _id
+      username
+    }
+  }
+`;

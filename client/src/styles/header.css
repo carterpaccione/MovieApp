@@ -21,3 +21,13 @@
     margin: 0 1rem;
     color: var(--color-neutral-one)
 }
+
+.nav-item:hover {
+    color: var(--color-primary);
+}
+
+.navbar {
+    background-color: black;
+    padding: 1.5rem;
+    width: 100%
+}

@@ -193,6 +193,15 @@ export const UserResolvers = {
         throw new Error("Could not fetch user recommendations.");
       }
     },
+    searchUsers: async(_parent: any, { query }: { query: string }) => {
+      try {
+        const users = await User.find({ username: { $regex: query, $options: "i" } });
+        return users;
+      } catch (error) {
+        console.error("Error searching users:", error);
+        throw new Error("Could not search users.");
+      }
+    },
   },
   Mutation: {
     addUser: async (_parent: any, { input }: NewUserInput) => {

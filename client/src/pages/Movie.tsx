@@ -216,7 +216,7 @@ const Movie = () => {
     }
   }, [userMovieData, pageMovie, dbMovie]);
   return (
-    <Container fluid="md">
+    <Container className="page-container">
       <Container>
         <Row className="movieContainer">
           <h2 className="movieTitle">{pageMovie?.Title}</h2>

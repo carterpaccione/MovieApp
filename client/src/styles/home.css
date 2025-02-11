@@ -1,9 +1,3 @@
-#home-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 #home-content {
     display: flex;
     flex-direction: column;
@@ -16,9 +10,4 @@
 #formState-button {
     margin: 0.5rem;
     width: max-content;
-}
-
-#formState-button:hover {
-    background-color: greenyellow;
-    color: black;
 }

@@ -162,7 +162,7 @@ const UserProfile = () => {
   console.log("friendshipStatus: ", friendshipStatus);
 
   return (
-    <Container id="profile-container">
+    <Container className="page-container">
       <Row className="justify-content-md-center text-center">
         <h3>{userData.userByID.username}'s Profile</h3>
         {checkFriendshipStatus()}

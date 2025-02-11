@@ -6,6 +6,7 @@ import Discover from './pages/Discover.js';
 import Movie from './pages/Movie.js';
 import MyProfile from './pages/MyProfile.js';
 import UserProfile from './pages/UserProfile.js';
+import UserSearch from './pages/UserSearch.js';
 import App from './App.js';
 
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/users/:userID',
                 element: <UserProfile></UserProfile>
+            },
+            {
+                path: '/search',
+                element: <UserSearch></UserSearch>
             }
         ]
     }

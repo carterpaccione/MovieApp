@@ -45,6 +45,8 @@ export const userTypeDefs = gql`
     userMovieData(movieID: ID!): UserMovie
     userListData: User
     userRecommendations: User
+
+    searchUsers(query: String!): [User]
   }
 
   type Mutation {

@@ -12,7 +12,7 @@ const Home = () => {
   const [formState, setFormState] = useState("login");
 
   return (
-    <Container id="home-container">
+    <Container className="page-container">
       <Col id="home-content">
         <Row>
           <Col>

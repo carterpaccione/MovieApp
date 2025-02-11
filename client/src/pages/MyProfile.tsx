@@ -46,7 +46,7 @@ const MyProfile = () => {
   console.log("Data:", data);
 
   return (
-    <Container id="profile-container">
+    <Container className="page-container">
       <Row>
           <h3>{data.me.username}'s Profile</h3>
       </Row>
@@ -103,6 +103,7 @@ const MyProfile = () => {
           ) : (
             <p>No Requests</p>
           )}
+          <Button onClick={() => navigate('/search')}>Find Friends</Button>
         </Col>
       </Row>
     </Container>

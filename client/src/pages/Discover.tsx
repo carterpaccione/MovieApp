@@ -120,17 +120,19 @@ const Discover = () => {
         </Button>
       </Card>
     ));
-  }
+  };
 
   useEffect(() => {
     if (recommendationData) {
-      setRecommendations(recommendationData.userRecommendations.recommendedMovies);
+      setRecommendations(
+        recommendationData.userRecommendations.recommendedMovies
+      );
       renderRecommendations(recommendations);
     }
-  },[recommendationData])
+  }, [recommendationData]);
 
   return (
-    <Container>
+    <Container className="page-container">
       <Row className="movies-container">
         {movies.map((movie: MovieSearch) => (
           <Card className="movie-card" key={`search-${movie.imdbID}`}>
@@ -171,7 +173,7 @@ const Discover = () => {
         })}
       </Row>
       <Row className="movies-container">
-        <Col sm={2}>
+        <Row className="movies-container">
           <h4>Recommended For You</h4>
           {userListData?.userListData.movies.length === 0 ? null : (
             <Button
@@ -180,13 +182,13 @@ const Discover = () => {
                 getRecommendations(userListData?.userListData.movies || [])
               }
             >
-              Get Recs
+              Generate
             </Button>
           )}
-        </Col>
+        </Row>
         <Col sm={10}>
-          <Row>
-              {renderRecommendations(recommendations)}
+          <Row className="movies-container">
+            {renderRecommendations(recommendations)}
           </Row>
         </Col>
       </Row>
