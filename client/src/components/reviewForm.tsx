@@ -39,7 +39,7 @@ const ReviewForm = (props: ReviewFormProps) => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const result = await addRating({
+      await addRating({
         variables: {
           input: {
             movieID: props.movieID,

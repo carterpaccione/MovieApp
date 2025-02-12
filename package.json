@@ -13,14 +13,29 @@
     "client:dev": "cd client && npm run dev",
     "seed": "cd server && npm run seed",
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
-    "render-build": "npm install --include=dev && npm run build"
+    "render-build": "npm install --include=dev && npm run build",
+    "cypress": "npx cypress open",
+    "test": "npx cypress run --browser electron --headless",
+    "test-gui": "npx cypress open --detached"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "@apollo/client": "^3.12.11",
+    "@types/react": "^19.0.8",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^8.2.2",
+    "react": "^19.0.0",
+    "react-router-dom": "^7.1.5"
   },
   "devDependencies": {
+    "@cypress/react": "^9.0.0",
+    "@testing-library/cypress": "^10.0.3",
+    "@types/cypress": "^1.1.6",
+    "@types/react-router-dom": "^5.3.3",
+    "cypress": "^14.0.3",
+    "cypress-vite": "^1.6.0",
+    "vite": "^6.1.0",
     "wait-on": "^7.2.0"
   }
 }

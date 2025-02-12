@@ -8,7 +8,7 @@ import { ADD_USER } from "../utils/mutations/userMutations";
 
 import "../styles/homeForm.css";
 
-const Login = () => {
+const SignUp = () => {
   const [signUp] = useMutation(ADD_USER);
 
   const [signUpForm, setSignUpForm] = useState({
@@ -95,4 +95,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;

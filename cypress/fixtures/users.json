@@ -1,0 +1,9 @@
+{
+  "_id": "60d5f2d8bc2d7e2b1c2b6c5a",
+  "name": "Test User",
+  "email": "test@test.com",
+  "password": "password",
+  "friends": [],
+  "movies": [],
+  "recommendedMovies": []
+}
