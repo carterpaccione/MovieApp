@@ -1,4 +1,3 @@
-import React from "react";
 import { MemoryRouter } from "react-router-dom";
 import '../support/commands';
 import Header from "../../client/src/components/header";

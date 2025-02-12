@@ -150,7 +150,7 @@ const Movie = () => {
               Mark Seen
             </Button>
             <Button className="button" onClick={() => handleWatchListButton()}>
-              Add to Watchlist
+              Add to WatchList
             </Button>
           </Col>
         );
@@ -185,7 +185,7 @@ const Movie = () => {
               Mark Seen
             </Button>
             <Button className="button" onClick={() => handleWatchListButton()}>
-              Add to Watchlist
+              Add to WatchList
             </Button>
           </Col>
         );

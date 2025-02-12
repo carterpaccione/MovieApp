@@ -7,14 +7,18 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+
 import Header from "../../client/src/components/header";
 import Home from "../../client/src/pages/Home";
+import UserContext from "../fixtures/userContext.json";
 
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
+  localStorage.setItem("user", JSON.stringify(UserContext.user));
+  localStorage.setItem("id_token", UserContext.id_token);
   const token = localStorage.getItem("id_token");
   return {
     headers: {
@@ -35,10 +39,10 @@ Cypress.Commands.add('mountWithApollo', (component: React.ReactNode) => {
         {component}
         </ApolloProvider>
     );
-})
+});
 
-describe("<Login />", () => {
-  it("renders the login component", () => {
+describe("<Home/>", () => {
+  it("renders the home page", () => {
     cy.mountWithApollo(
         <MemoryRouter>
             <Header />
@@ -46,4 +50,22 @@ describe("<Login />", () => {
         </MemoryRouter>
     );
   });
+
+  beforeEach(() => {
+    cy.mountWithApollo(
+        <MemoryRouter>
+            <Header />
+            <Home />
+        </MemoryRouter>
+    )
+  });
+
+  it("renders the login form", () => {
+    cy.get("#form-container").children().should("have.text", "UsernamePasswordSubmit");
+  });
+
+  it("renders the signup form when the 'Sign Up' button is clicked", () => {
+    cy.get("#signup-button").contains("Sign Up").click();
+    cy.get("#form-container").children().should("have.text", "EmailUsernamePasswordPasswordSubmit");
+  })
 });

@@ -7,7 +7,7 @@
     height: 100%;
 }
 
-#formState-button {
+.home-button {
     margin: 0.5rem;
     width: max-content;
 }
