@@ -41,6 +41,7 @@ const Login = () => {
           name="username"
           type="text"
           placeholder="Enter username"
+          id="cypress-login-username"
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -51,11 +52,12 @@ const Login = () => {
           name="password"
           type="password"
           placeholder="Password"
+          id="cypress-login-password"
           onChange={handleInputChange}
         />
       </Form.Group>
 
-      <Button className="button" type="submit">
+      <Button className="button" type="submit" id="cypress-login-button">
         Submit
       </Button>
     </Form>

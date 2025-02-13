@@ -42,6 +42,5 @@ describe("<Header />", () => {
     );
     cy.get("input").type("The Matrix");
     cy.get("button").click();
-    // cy.url().should("eq", "http://localhost:3000/discover");
   });
 });

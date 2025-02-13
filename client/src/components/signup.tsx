@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 
 import AuthService from "../utils/auth";
+import { validateNewUserInput } from "../utils/helper";
 import { ADD_USER } from "../utils/mutations/userMutations";
 
 import "../styles/homeForm.css";
 
 const SignUp = () => {
   const [signUp] = useMutation(ADD_USER);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [signUpForm, setSignUpForm] = useState({
     username: "",
@@ -27,9 +29,13 @@ const SignUp = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (signUpForm.password !== signUpForm.confirmPassword) {
-      console.error("Passwords do not match.");
-      return;
+    if(validateNewUserInput(signUpForm) !== true) {
+        const validationResult = validateNewUserInput(signUpForm);
+        if (validationResult !== true) {
+            setErrorMessage(validationResult);
+            return;
+        }
+        return;
     }
     const input = { 
         username: signUpForm.username,
@@ -52,6 +58,7 @@ const SignUp = () => {
           name="email"
           type="text"
           placeholder="Enter email"
+          id="cypress-signup-email"
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -62,6 +69,7 @@ const SignUp = () => {
           name="username"
           type="text"
           placeholder="Enter username"
+          id="cypress-signup-username"
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -72,6 +80,7 @@ const SignUp = () => {
           name="password"
           type="password"
           placeholder="Password"
+          id="cypress-signup-password"
           onChange={handleInputChange}
         />
       </Form.Group>
@@ -82,10 +91,11 @@ const SignUp = () => {
           name="confirmPassword"
           type="password"
           placeholder="Confirm Password"
+          id="cypress-signup-confirm-password"
           onChange={handleInputChange}
         />
       </Form.Group>
-
+      {errorMessage && <p id="errorMessage">{errorMessage}</p>}
       <Button 
       className="button"
       variant="primary" type="submit">
