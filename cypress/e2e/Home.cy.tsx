@@ -47,16 +47,6 @@ describe ("Home Page functionality", () => {
             cy.visit("http://localhost:3000/")
         });
 
-        it("Signs up a user", () => {
-            cy.get("button").contains("Sign Up").should("be.visible").click();
-            cy.get("#cypress-signup-email").type(User.email);
-            cy.get("#cypress-signup-username").type(User.username);
-            cy.get("#cypress-signup-password").type(User.password);
-            cy.get("#cypress-signup-confirm-password").type(User.password);
-            cy.get("button").contains("Submit").should("be.visible").click();
-            cy.location("pathname").should("eq", "/discover")
-        });
-
         it("Shows the correct sign up error messages", () => {
             cy.get("button").contains("Sign Up").should("be.visible").click();
             cy.get("#cypress-signup-email").type("test");
@@ -74,6 +64,16 @@ describe ("Home Page functionality", () => {
             cy.get("#cypress-signup-confirm-password").type("test");
             cy.get("button").contains("Submit").should("be.visible").click();
             cy.get("#errorMessage").should("have.text", "Passwords do not match")
+        });
+
+        it("Signs up a user", () => {
+            cy.get("button").contains("Sign Up").should("be.visible").click();
+            cy.get("#cypress-signup-email").type(User.email);
+            cy.get("#cypress-signup-username").type(User.username);
+            cy.get("#cypress-signup-password").type(User.password);
+            cy.get("#cypress-signup-confirm-password").type(User.password);
+            cy.get("button").contains("Submit").should("be.visible").click();
+            cy.location("pathname").should("eq", "/discover")
         });
 
         it("Logs in a user", () => {

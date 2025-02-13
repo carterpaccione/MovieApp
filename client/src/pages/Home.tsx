@@ -19,7 +19,7 @@ const Home = () => {
             <Button className="button home-button" id="login-button" onClick={() => setFormState("login")}>Login</Button>
           </Col>
           <Col>
-            <Button className="button" id="signup-button" onClick={() => setFormState("signup")}>Sign Up</Button>
+            <Button className="button home-button" id="signup-button" onClick={() => setFormState("signup")}>Sign Up</Button>
           </Col>
         </Row>
         <Row>{formState === "login" ? <Login /> : <SignUp />}</Row>

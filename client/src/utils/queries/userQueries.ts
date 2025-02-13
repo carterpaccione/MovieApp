@@ -12,6 +12,7 @@ export const QUERY_ME = gql`
           title
           imdbID
           poster
+          averageRating
         }
         status
         rating {

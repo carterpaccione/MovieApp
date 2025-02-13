@@ -43,7 +43,7 @@ export const UserResolvers = {
             path: "movies",
             select: "movie status rating _id",
             populate: [
-              { path: "movie", select: "title imdbID poster _id" },
+              { path: "movie", select: "title imdbID poster _id averageRating" },
               { path: "rating", select: "score review _id" },
             ],
           },
