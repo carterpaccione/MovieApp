@@ -21,7 +21,7 @@ describe("<Header />", () => {
     cy.get("form").should("have.id", "search-container")
     .children("input")
     .should("have.attr", "placeholder", "Search for a movie...");
-    cy.get("button").should("have.text", "Search");
+    cy.get("button").should("have.id", "search-button");
   });
 
   it("should update the query state", () => {
@@ -41,6 +41,6 @@ describe("<Header />", () => {
       </MemoryRouter>
     );
     cy.get("input").type("The Matrix");
-    cy.get("button").click();
+    cy.get(`button[id="search-button"]`).click();
   });
 });

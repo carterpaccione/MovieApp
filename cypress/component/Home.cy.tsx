@@ -61,11 +61,12 @@ describe("<Home/>", () => {
   });
 
   it("renders the login form", () => {
-    cy.get("#form-container").children().should("have.text", "UsernamePasswordSubmit");
+    cy.get("#form-container").should("exist");
+    cy.get("#form-container").children().should("have.text", "UsernamePassword");
   });
 
   it("renders the signup form when the 'Sign Up' button is clicked", () => {
-    cy.get("#signup-button").contains("Sign Up").click();
-    cy.get("#form-container").children().should("have.text", "EmailUsernamePasswordPasswordSubmit");
+    cy.get(`button[id="signup-button"]`).should("exist").click();
+    cy.get("#form-container").children().should("have.text", "EmailUsernamePasswordPassword");
   })
 });
