@@ -29,19 +29,19 @@ const SignUp = () => {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(validateNewUserInput(signUpForm) !== true) {
-        const validationResult = validateNewUserInput(signUpForm);
-        if (validationResult !== true) {
-            setErrorMessage(validationResult);
-            return;
-        }
+    if (validateNewUserInput(signUpForm) !== true) {
+      const validationResult = validateNewUserInput(signUpForm);
+      if (validationResult !== true) {
+        setErrorMessage(validationResult);
         return;
+      }
+      return;
     }
-    const input = { 
-        username: signUpForm.username,
-        email: signUpForm.email,
-        password: signUpForm.password,
-    }
+    const input = {
+      username: signUpForm.username,
+      email: signUpForm.email,
+      password: signUpForm.password,
+    };
     try {
       const { data } = await signUp({ variables: { input: input } });
       AuthService.login(data.addUser.token, { ...data.addUser.user });
@@ -52,7 +52,7 @@ const SignUp = () => {
 
   return (
     <Form id="form-container" onSubmit={handleFormSubmit}>
-        <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email</Form.Label>
         <Form.Control
           name="email"
@@ -96,10 +96,16 @@ const SignUp = () => {
         />
       </Form.Group>
       {errorMessage && <p id="errorMessage">{errorMessage}</p>}
-      <Button 
-      className="button"
-      variant="primary" type="submit">
-        Submit
+      <Button className="button" id="home-form-submit-button" variant="primary" type="submit">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#000000"
+        >
+          <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+        </svg>
       </Button>
     </Form>
   );

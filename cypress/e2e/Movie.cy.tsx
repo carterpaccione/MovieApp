@@ -60,6 +60,16 @@ describe("Movie Page API Calls", () => {
               },
             },
           });
+        } else if (req.body.operationName === "dbMovie") {
+          req.reply({
+            body: {
+              data: {
+                dbMovie: {
+                  ...MovieFixture.dbMovie,
+                },
+              },
+            },
+          });
         }
       }).as("markSeenCalls");
 
@@ -71,12 +81,12 @@ describe("Movie Page API Calls", () => {
     });
 
     it("Mark Seen Button saves the movie to the database and marks the userMovie status as SEEN", () => {
-      cy.get("button").contains("Mark Seen").should("be.visible").click();
+      cy.get(`button[id="mark-seen-button"]`).should("be.visible").click();
       cy.wait("@markSeenCalls").then((interception) => {
         expect(interception.response?.statusCode).to.eq(200);
       });
-      cy.get("button").contains("Mark Seen").should("not.exist");
-      cy.get("button").contains("Mark Unseen").should("be.visible");
+      cy.get(`button[id="mark-seen-button"]`).should("not.exist");
+      cy.get(`button[id="remove-seen-button"]`).should("be.visible");
     });
   });
 
@@ -132,6 +142,16 @@ describe("Movie Page API Calls", () => {
               },
             },
           });
+        } else if (req.body.operationName === "dbMovie") {
+          req.reply({
+            body: {
+              data: {
+                dbMovie: {
+                  ...MovieFixture.dbMovie,
+                },
+              },
+            },
+          });
         }
       }).as("markWatchListCalls");
 
@@ -143,13 +163,13 @@ describe("Movie Page API Calls", () => {
     });
 
     it("Mark WatchList Button saves the movie to the database and marks the userMovie status as WATCHLIST", () => {
-      cy.get("button").contains("Add to WatchList").should("be.visible").click();
+      cy.get(`button[id="mark-watchlist-button"]`).should("be.visible").click();
       cy.wait("@markWatchListCalls").then((interception) => {
         expect(interception.response?.statusCode).to.eq(200);
       });
-      cy.get("button").contains("Add to WatchList").should("not.exist");
-      cy.get("button").contains("Mark Seen").should("be.visible");
-      cy.get("button").contains("Remove From WatchList").should("be.visible");
+      cy.get(`button[id="mark-watchlist-button"]`).should("not.exist");
+      cy.get(`button[id="mark-seen-button"]`).should("be.visible");
+      cy.get(`button[id="remove-watchlist-button"]`).should("be.visible");
     });
   });
 });

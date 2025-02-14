@@ -7,6 +7,10 @@
     height: 100%;
 }
 
-#test-button {
-    background-color: var(--color-primary);
+#home-form-sumbit-button {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    width: max-content;
+    cursor: pointer;
+    margin: 1rem;
 }

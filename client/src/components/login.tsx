@@ -35,7 +35,7 @@ const Login = () => {
 
   return (
     <Form id="form-container" onSubmit={handleFormSubmit}>
-      <Form.Group className="mb-3" controlId="formBasicEmail">
+      <Form.Group className="mb-3">
         <Form.Label>Username</Form.Label>
         <Form.Control
           name="username"
@@ -57,8 +57,16 @@ const Login = () => {
         />
       </Form.Group>
 
-      <Button className="button" type="submit" id="cypress-login-button">
-        Submit
+      <Button className="button" id="home-form-submit-button" type="submit">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#000000"
+        >
+          <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+        </svg>
       </Button>
     </Form>
   );

@@ -48,38 +48,38 @@ describe ("Home Page functionality", () => {
         });
 
         it("Shows the correct sign up error messages", () => {
-            cy.get("button").contains("Sign Up").should("be.visible").click();
+            cy.get(`button[id="signup-button"]`).should("be.visible").click();
             cy.get("#cypress-signup-email").type("test");
-            cy.get("button").contains("Submit").should("be.visible").click();
+            cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
             cy.get("#errorMessage").should("have.text", "Invalid email")
-            cy.get("button").contains("Sign Up").should("be.visible").click();
+            cy.get(`button[id="signup-button"]`).should("be.visible").click();
             cy.get("#cypress-signup-email").type(User.email);
             cy.get("#cypress-signup-username").should("be.visible");
-            cy.get("button").contains("Submit").should("be.visible").click();
+            cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
             cy.get("#errorMessage").should("have.text", "Username cannot be empty")
             cy.get("#cypress-signup-username").type(User.username);
-            cy.get("button").contains("Submit").should("be.visible").click();
+            cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
             cy.get("#errorMessage").should("have.text", "Password must be at least 8 characters")
             cy.get("#cypress-signup-password").type(User.password);
             cy.get("#cypress-signup-confirm-password").type("test");
-            cy.get("button").contains("Submit").should("be.visible").click();
+            cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
             cy.get("#errorMessage").should("have.text", "Passwords do not match")
         });
 
         it("Signs up a user", () => {
-            cy.get("button").contains("Sign Up").should("be.visible").click();
+            cy.get(`button[id="signup-button"]`).should("be.visible").click();
             cy.get("#cypress-signup-email").type(User.email);
             cy.get("#cypress-signup-username").type(User.username);
             cy.get("#cypress-signup-password").type(User.password);
             cy.get("#cypress-signup-confirm-password").type(User.password);
-            cy.get("button").contains("Submit").should("be.visible").click();
+            cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
             cy.location("pathname").should("eq", "/discover")
         });
 
         it("Logs in a user", () => {
             cy.get("#cypress-login-username").type(User.username);
             cy.get("#cypress-login-password").type(User.password);
-            cy.get("#cypress-login-button").should("be.visible").click();
+            cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
             cy.location("pathname").should("eq", "/discover")
         });
     })

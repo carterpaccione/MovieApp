@@ -8,26 +8,14 @@
     width: 100%;
 } */
 
+/* @import '../styles/main.css'; */
+
 #recommended-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: max-content;
-}
-
-.recommended-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 10rem;
-    margin: 1rem;
-    padding: 1rem;
-    background-color: var(--color-neutral-two);
-    border: 1px solid var(--color-secondary);
-    border-radius: 5px;
 }
 
 #friends-container {
@@ -39,44 +27,42 @@
     height: max-content;
     margin: 1rem;
     padding: 1rem;
-    background-color: var(--color-secondary);
+    background-color: var(--color-grey-two);
     border: 1px solid black;
     border-radius: 5px;
 }
 
 .friend-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 8rem;
-    height: 4rem;
-    margin: 1rem;
-    padding: 1rem;
-    background-color: var(--color-neutral-two);
-    border: 1px solid var(--color-secondary);
+    width: max-content;
+    height: max-content;
+    background-color: var(--color-secondary);
+    border: 1px solid var(--color-primary);
     border-radius: 5px;
 }
 
 .friend-card:hover {
     cursor: pointer;
-    background-color: var(--color-accent);
+    background-color: var(--color-grey-one);
     color: var(--color-text-two);
 }
 
 /* Movie Table */
 
-.accordian {
+.accordion {
     width: 40rem;
     margin: 1rem;
     padding: 1rem;
-    background-color: var(--color-neutral-two);
+    background-color: var(--color-grey-two);
     border: 1px solid var(--color-secondary);
     border-radius: 5px;
 }
 
-.accordian table th {
-    background-color: var(--color-neutral-two);
+.accordidon-header {
+    background-color: var(--color-grey-one);
+}
+
+.accordion table th {
+    background-color: var(--color-grey-one);
     text-align: center;
 }
 

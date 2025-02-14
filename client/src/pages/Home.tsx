@@ -14,7 +14,7 @@ const Home = () => {
   return (
     <Container className="page-container">
       <Col id="home-content">
-        <Row>
+        <Row id="home-button-row">
           <Col>
             <Button className="button home-button" id="login-button" onClick={() => setFormState("login")}>Login</Button>
           </Col>

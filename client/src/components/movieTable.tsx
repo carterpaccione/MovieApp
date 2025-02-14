@@ -131,9 +131,9 @@ const MovieTable = (props: MovieTableProps) => {
 
   return (
     <Container>
-      <Accordion className="accordian" defaultActiveKey="0">
+      <Accordion className="accordion" defaultActiveKey="0">
         <Accordion.Item eventKey="0">
-          <Accordion.Header>Watch List</Accordion.Header>
+          <Accordion.Header className="accordion-header">Watch List</Accordion.Header>
           <Accordion.Body>
             <Table striped bordered hover>
               <thead>
@@ -148,7 +148,7 @@ const MovieTable = (props: MovieTableProps) => {
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="1">
-          <Accordion.Header>Seen List</Accordion.Header>
+          <Accordion.Header className="accordion-header">Seen List</Accordion.Header>
           <Accordion.Body>
             <Table striped bordered hover>
               <thead>
@@ -164,7 +164,7 @@ const MovieTable = (props: MovieTableProps) => {
           </Accordion.Body>
         </Accordion.Item>
         <Accordion.Item eventKey="2">
-          <Accordion.Header>Reviews</Accordion.Header>
+          <Accordion.Header className="accordion-header">Reviews</Accordion.Header>
           <Accordion.Body>
             <Container>{renderReviews(reviewList)}</Container>
           </Accordion.Body>

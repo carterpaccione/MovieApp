@@ -11,7 +11,6 @@ import {
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
 import "../styles/discover.css";
@@ -22,9 +21,9 @@ import {
 } from "../utils/queries/userQueries";
 import { SET_RECOMMENDATIONS } from "../utils/mutations/userMutations";
 import { fetchMovieByID } from "../utils/helper";
-import { ImportMeta } from '../components/header.js';
+import { ImportMeta } from "../components/header.js";
 
-
+import MovieCard from "../components/movieCard";
 
 const Discover = () => {
   const location = useLocation();
@@ -107,19 +106,13 @@ const Discover = () => {
       return <div>No recommendations found</div>;
     }
     return data.map((movie: MovieSearch) => (
-      <Card className="movie-card" key={`rec-${movie.imdbID}`}>
-        <Card.Img src={movie.Poster} alt={movie.Title} />
-        <Card.Title className="movie-card-text">{movie.Title}</Card.Title>
-        <Card.Text className="movie-card-text">{movie.Year}</Card.Text>
-        <Button
-          className="button"
-          onClick={() => {
-            navigate(`/movies/${movie.imdbID}`);
-          }}
-        >
-          View Details
-        </Button>
-      </Card>
+      <MovieCard
+        movie={movie}
+        key={`rec-${movie.imdbID}`}
+        onClick={() => {
+          navigate(`/movies/${movie.imdbID}`);
+        }}
+      />
     ));
   };
 
@@ -136,40 +129,31 @@ const Discover = () => {
     <Container className="page-container">
       <Row className="movies-container">
         {movies.map((movie: MovieSearch) => (
-          <Card className="movie-card" key={`search-${movie.imdbID}`}>
-            <Card.Img src={movie.Poster} alt={movie.Title} />
-            <Card.Title className="movie-card-text">{movie.Title}</Card.Title>
-            <Card.Text className="movie-card-text">{movie.Year}</Card.Text>
-            <Button
-              className="button movie-card-button"
-              onClick={() => {
-                navigate(`/movies/${movie.imdbID}`);
-              }}
-            >
-              View Details
-            </Button>
-          </Card>
+          <MovieCard
+            movie={movie}
+            key={`search-${movie.imdbID}`}
+            onClick={() => {
+              navigate(`/movies/${movie.imdbID}`);
+            }}
+          />
         ))}
       </Row>
       <Row className="movies-container">
         <h4>Top 5</h4>
         {topMoviesData?.topMovies.map((movie) => {
           return (
-            <Card className="movie-card" key={`top-${movie.imdbID}`}>
-              <Card.Img id="card-image" src={movie.poster} alt={movie.title} />
-              <Card.Title className="movie-card-text">{movie.title}</Card.Title>
-              <Card.Text className="movie-card-text">
-                {movie.averageRating}
-              </Card.Text>
-              <Button
-                className="button"
-                onClick={() => {
-                  navigate(`/movies/${movie.imdbID}`);
-                }}
-              >
-                View Details
-              </Button>
-            </Card>
+            <MovieCard
+              movie={{
+                Title: movie.title,
+                Poster: movie.poster,
+                imdbID: movie.imdbID,
+                averageRating: movie.averageRating,
+              }}
+              key={`top-${movie.imdbID}`}
+              onClick={() => {
+                navigate(`/movies/${movie.imdbID}`);
+              }}
+            />
           );
         })}
       </Row>
@@ -179,11 +163,20 @@ const Discover = () => {
           {userListData?.userListData.movies.length === 0 ? null : (
             <Button
               className="button"
+              id="get-recommendations-button"
               onClick={() =>
                 getRecommendations(userListData?.userListData.movies || [])
               }
             >
-              Generate
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#000000"
+              >
+                <path d="M400-480ZM160-160q-33 0-56.5-23.5T80-240v-240h80v240h480v-480H400v-80h240q33 0 56.5 23.5T720-720v180l160-160v440L720-420v180q0 33-23.5 56.5T640-160H160Zm40-160h400L465-500 360-360l-65-87-95 127Zm-40-240v-80H80v-80h80v-80h80v80h80v80h-80v80h-80Z" />
+              </svg>
             </Button>
           )}
         </Row>
