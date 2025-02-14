@@ -6,6 +6,8 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/esm/InputGroup";
 import Button from "react-bootstrap/Button";
 
+import '../styles/reviewForm.css';
+
 import { ADD_RATING } from "../utils/mutations/ratingMutations";
 
 export interface ReviewFormProps {
@@ -13,7 +15,7 @@ export interface ReviewFormProps {
   rating?: {
     score: number;
     review: string;
-  }
+  };
   handleUserMovieRefetch: () => void;
   handleDBMovieRefetch: () => void;
 }
@@ -28,7 +30,11 @@ const ReviewForm = (props: ReviewFormProps) => {
     setReview(props.rating?.review || "");
   }, [props.rating]);
 
-  const handleScoreChange = (e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
+  const handleScoreChange = (
+    e:
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLInputElement>
+  ) => {
     setScore(parseInt(e.target.value));
   };
 
@@ -58,18 +64,21 @@ const ReviewForm = (props: ReviewFormProps) => {
   return (
     <Form onSubmit={handleFormSubmit}>
       <Col id="scoreSelector">
-        <Form.Label>{props.rating ? "Update Rating: " : `Rate this movie: `}{score}</Form.Label>
+        <Form.Label>
+          {props.rating ? "Update Rating: " : `Rate this movie: `}
+          {score}
+        </Form.Label>
         <Form.Range
-        min={1}
-        max={10}
-        step={1}
-        value={score}
-        onChange={handleScoreChange} 
+          min={1}
+          max={10}
+          step={1}
+          value={score}
+          onChange={handleScoreChange}
         />
       </Col>
-      <Col id="reviewInput">
+      <Col>
         <Form.Label htmlFor="review">Review:</Form.Label>
-        <InputGroup>
+        <InputGroup id="reviewInput">
           <Form.Control
             as="textarea"
             aria-label="With textarea"
@@ -78,7 +87,17 @@ const ReviewForm = (props: ReviewFormProps) => {
           />
         </InputGroup>
         {error && <p className="text-danger">{error.message}</p>}
-        <Button className="button" type="submit">Submit</Button>
+        <Button className="button" id="review-form-submit-button" type="submit">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="24px"
+            viewBox="0 -960 960 960"
+            width="24px"
+            fill="#000000"
+          >
+            <path d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z" />
+          </svg>
+        </Button>
       </Col>
     </Form>
   );

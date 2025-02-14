@@ -1,8 +1,17 @@
-#scoreSelector {
-    width: 25%;
+#review-form-submit-button {
+    width: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+
+    position: relative;
+    left: 45%;
 }
 
 #reviewInput {
-    width: 25%;
-    height: 10rem;
+    min-height: 16rem;
+    max-height: max-content;
+}
+
+.form-range {
+    background-color: var(--color-primary);
 }

@@ -5,9 +5,10 @@ import { useQuery, useMutation } from "@apollo/client";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import "../styles/movie.css";
+
+import ReviewCard from "../components/reviewCard.js";
 
 import ReviewForm, { ReviewFormProps } from "../components/reviewForm.js";
 import type { Movie, IMovie } from "../models/Movie.js";
@@ -294,7 +295,7 @@ const Movie = () => {
       });
     }
   }, [userMovieData, pageMovie, dbMovie]);
-  
+
   return (
     <Container className="page-container">
       <Container>
@@ -328,41 +329,18 @@ const Movie = () => {
         </Row>
       </Container>
       <Container fluid>
-        <Row>
           {dbMovie?.movie.ratings &&
             dbMovie.movie.ratings.map((rating: IRating) =>
               rating.review && rating.review.length > 0 ? (
-                <Card
+                <ReviewCard
                   key={rating._id}
-                  style={{ width: "18rem" }}
-                  className="ratingCard"
-                >
-                  <Card.Body>
-                    <Card.Title>
-                      <Card.Link
-                        onClick={() => handleUserNavigate(rating.user._id)}
-                      >
-                        {rating.user.username}
-                      </Card.Link>
-                    </Card.Title>
-                    <Card.Title>Score: {rating.score}</Card.Title>
-                    <Card.Subtitle className="mb-2 text-muted">
-                      {new Date(rating.createdAt).toLocaleDateString()}
-                    </Card.Subtitle>
-                    <Card.Text>{rating.review}</Card.Text>
-                    {rating.user._id === userInfo._id ? (
-                      <Button
-                        className="button"
-                        onClick={() => handleDeleteRating(rating._id)}
-                      >
-                        Delete
-                      </Button>
-                    ) : null}
-                  </Card.Body>
-                </Card>
+                  rating={rating}
+                  userID={userInfo._id}
+                  userNavigate={() => handleUserNavigate(rating.user._id)}
+                  deleteButton={() => handleDeleteRating(rating._id)}
+                />
               ) : null
             )}
-        </Row>
       </Container>
     </Container>
   );

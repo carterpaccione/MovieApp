@@ -1,0 +1,39 @@
+.review-card {
+    width: 50%;
+    height: 25%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    background-color: var(--color-grey-two);
+    color: var(--color-secondary);
+}
+
+.review-card h4 {
+    margin: 10px;
+}
+
+#review-card-username:hover {
+    cursor: pointer;
+}
+
+.review-card p {
+    margin: 10px;
+    text-decoration:dotted;
+}
+
+#review-card-date {
+    font-style: italic;
+    font-size: small;
+}
+
+.review-card button {
+    position: relative;
+    left: 45%;
+    text-align: center;
+    margin-top: 20px;
+    padding: 5px;
+    width: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    cursor: pointer;
+}
