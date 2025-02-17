@@ -1,14 +1,22 @@
-/* #profile-container {
+#profile-header .row {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
     justify-content: center;
-    border-radius: 5px;
-    margin: 1rem;
-    width: 100%;
-} */
+    align-items: center;
+}
 
-/* @import '../styles/main.css'; */
+#profile-header button {
+    margin: .5rem;
+    padding: .5rem;
+    width: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+#profile-header h2 {
+    width: max-content;
+    font-weight: bold;
+}
 
 #recommended-container {
     display: flex;
@@ -38,6 +46,7 @@
     background-color: var(--color-secondary);
     border: 1px solid var(--color-primary);
     border-radius: 5px;
+    margin: .5rem;
 }
 
 .friend-card:hover {
@@ -71,6 +80,10 @@
     object-fit: cover;
 }
 
+.table-image:hover {
+    cursor: pointer;
+}
+
 .reviewContainer {
     display: flex;
     flex-direction: row;
@@ -83,6 +96,10 @@
 .reviewContainer img {
     width: 10rem;
     object-fit: cover;
+}
+
+.reviewContainer img:hover {
+    cursor: pointer;
 }
 
 td {

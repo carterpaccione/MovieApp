@@ -26,16 +26,27 @@ const ReviewCard = (props: ReviewCardProps) => {
               props.userNavigate();
             }}
           >
-            User: {props.rating.user.username}
+            {props.rating.user.username}
           </h4>
         </Col>
         <Col>
-          <h4>Score: {props.rating.score}</h4>
+          <h4>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#FFFFFF"
+            >
+              <path d="m354-287 126-76 126 77-33-144 111-96-146-13-58-136-58 135-146 13 111 97-33 143ZM233-120l65-281L80-590l288-25 112-265 112 265 288 25-218 189 65 281-247-149-247 149Zm247-350Z" />
+            </svg>
+            {props.rating.score}/10
+          </h4>
         </Col>
       </Row>
       <Row>
         <p id="review-card-date">
-          Created At: {new Date(props.rating.createdAt).toLocaleDateString()}
+          {new Date(props.rating.createdAt).toLocaleDateString()}
         </p>
       </Row>
       <Row>
@@ -46,7 +57,7 @@ const ReviewCard = (props: ReviewCardProps) => {
       <Row>
         <Col>
           {props.rating.user._id === props.userID && (
-            <Button className="button" onClick={props.deleteButton}>
+            <Button className="button" title="Delete" onClick={props.deleteButton}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"

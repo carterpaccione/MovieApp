@@ -1,9 +1,9 @@
-.movie-card-test {
+.movie-card {
     margin: 10px;
     padding: 10px;
     transition: 0.3s;
-    width: 12rem;
-    height: 24rem;
+    width: 14rem;
+    aspect-ratio: 2/3;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -11,9 +11,9 @@
     background-color: transparent;
 }
 
-.movie-card-test img {
-    width: 12rem;
-    height: 24rem;
+.movie-card img {
+    width: 14rem;
+    aspect-ratio: 2/3;
 }
 
 .movie-card-text {
@@ -35,15 +35,15 @@
     opacity: 0;
 }
 
-.movie-card-test:hover {
+.movie-card:hover {
     transform: scale(1.1);
 }
 
-.movie-card-test:hover img {
+.movie-card:hover img {
     opacity: 0.3;
 }
 
-.movie-card-test:hover .movie-card-text-container {
+.movie-card:hover .movie-card-text-container {
     opacity: 1;
     transition: 0.3s ease;
 }

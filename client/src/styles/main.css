@@ -32,6 +32,9 @@ body {
 
 h1 {
     color: var(--color-secondary);
+    margin: 1rem;
+    font-weight: bold;
+    padding-right: 1rem;
 }
 
 h2 {
@@ -43,9 +46,11 @@ h2 {
     color: var(--color-primary);
     width: max-content;
     cursor: pointer;
+    border: 2px solid var(--color-secondary);
 }
 
 .button:hover {
     background-color: var(--color-grey-one);
     color: var(--color-text-two);
+    border: 2px solid var(--color-secondary);
 }

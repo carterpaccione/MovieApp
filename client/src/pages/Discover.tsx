@@ -164,6 +164,7 @@ const Discover = () => {
             <Button
               className="button"
               id="get-recommendations-button"
+              title="Generate Recommendations"
               onClick={() =>
                 getRecommendations(userListData?.userListData.movies || [])
               }

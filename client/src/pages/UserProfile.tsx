@@ -8,6 +8,8 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
+import "../styles/myProfile.css";
+
 import MovieTable from "../components/movieTable";
 
 import { QUERY_USER_BY_ID } from "../utils/queries/userQueries";
@@ -221,9 +223,14 @@ const UserProfile = () => {
 
   return (
     <Container className="page-container">
-      <Row className="justify-content-md-center text-center">
-        <h3>{userData.userByID.username}'s Profile</h3>
-        {checkFriendshipStatus()}
+      <Row
+        className="justify-content-md-center text-center"
+        id="profile-header"
+      >
+        <Row>
+          <h2>{userData.userByID.username}'s Profile</h2>
+        </Row>
+        <Row>{checkFriendshipStatus()}</Row>
       </Row>
       <Row>
         <Col>

@@ -96,7 +96,7 @@ const SignUp = () => {
         />
       </Form.Group>
       {errorMessage && <p id="errorMessage">{errorMessage}</p>}
-      <Button className="button" id="home-form-submit-button" variant="primary" type="submit">
+      <Button className="button" id="home-form-submit-button" variant="primary" type="submit" title="Submit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"

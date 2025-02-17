@@ -149,6 +149,7 @@ const Movie = () => {
             <Button
               className="button"
               id="mark-seen-button"
+              title="Mark as Seen"
               onClick={() => handleSeenButton()}
             >
               <svg
@@ -164,6 +165,7 @@ const Movie = () => {
             <Button
               className="button"
               id="mark-watchlist-button"
+              title="Add to Watchlist"
               onClick={() => handleWatchListButton()}
             >
               <svg
@@ -187,6 +189,7 @@ const Movie = () => {
             <Button
               className="button"
               id="remove-seen-button"
+              title="Remove from Seen"
               onClick={() => handleRemoveButton()}
             >
               <svg
@@ -208,6 +211,7 @@ const Movie = () => {
             <Button
               className="button"
               id="mark-seen-button"
+              title="Mark as Seen"
               onClick={() => handleSeenButton()}
             >
               <svg
@@ -223,6 +227,7 @@ const Movie = () => {
             <Button
               className="button"
               id="remove-watchlist-button"
+              title="Remove from Watchlist"
               onClick={() => handleRemoveButton()}
             >
               <svg
@@ -244,6 +249,7 @@ const Movie = () => {
             <Button
               className="button"
               id="mark-seen-button"
+              title="Mark as Seen"
               onClick={() => handleSeenButton()}
             >
               <svg
@@ -259,6 +265,7 @@ const Movie = () => {
             <Button
               className="button"
               id="mark-watchlist-button"
+              title="Add to Watchlist"
               onClick={() => handleWatchListButton()}
             >
               <svg

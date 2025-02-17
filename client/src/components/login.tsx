@@ -57,7 +57,7 @@ const Login = () => {
         />
       </Form.Group>
 
-      <Button className="button" id="home-form-submit-button" type="submit">
+      <Button className="button" id="home-form-submit-button" type="submit" title="Submit">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24px"

@@ -17,7 +17,7 @@ const MovieCard: React.FC<IMovieCardProps> = ({
   onClick,
 }: IMovieCardProps) => {
   return (
-    <Card className="movie-card-test" onClick={onClick}>
+    <Card className="movie-card" onClick={onClick}>
       <Card.Img src={movie.Poster} alt={movie.Title} />
       <div className="movie-card-text-container">
         <Card.Title className="movie-card-text">{movie.Title}</Card.Title>

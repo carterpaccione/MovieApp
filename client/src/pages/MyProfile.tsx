@@ -50,8 +50,9 @@ const MyProfile = () => {
 
   return (
     <Container className="page-container">
-      <Row>
-        <h3>{data.me.username}'s Profile</h3>
+      <Row className="justify-content-md-center text-center"
+        id="profile-header">
+        <h2>{data.me.username}'s Profile</h2>
       </Row>
       <Row>
         <Col id="recommended-container">
@@ -63,6 +64,7 @@ const MyProfile = () => {
                   Title: movie.Title,
                   Poster: movie.Poster,
                   imdbID: movie.imdbID,
+                  Year: movie.Year,
                 }}
                 key={`rec-${movie.imdbID}`}
                 onClick={() => {
@@ -78,7 +80,7 @@ const MyProfile = () => {
           <MovieTable movies={data.me.movies} />
         </Col>
         <Col id="friends-container">
-          <h3>FriendsList</h3>
+          <h3>Friends</h3>
           {data.me.friends.length > 0 ? (
             data.me.friends.map((friend: any, index: number) => (
               <Card className="friend-card" key={index}>
@@ -97,7 +99,7 @@ const MyProfile = () => {
           {requestsError && <p>Error!</p>}
           {incomingRequests && incomingRequests.length > 0 ? (
             incomingRequests.map((request: IFriendship, index: number) => (
-              <Card style={{ width: "max-content" }} key={index}>
+              <Card className="friend-card" key={index}>
                 <Card.Body>
                   <Card.Title
                     onClick={() => handleUserNavigate(request.requester._id)}
@@ -110,7 +112,7 @@ const MyProfile = () => {
           ) : (
             <p>No Requests</p>
           )}
-          <Button className="button" onClick={() => navigate("/search")}>
+          <Button className="button" title="Find Friends" onClick={() => navigate("/search")}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
