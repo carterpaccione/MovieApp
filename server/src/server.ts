@@ -29,10 +29,11 @@ const startApolloServer = async () => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  // app.use((req, _res, next) => {
-  //   console.log("Request received: ", req.method, req.url);
-  //   next();
-  // });
+  app.use((req, _res, next) => {
+    console.log("Request received: ", req.method, req.url);
+    next();
+  });
+
   app.use(
     "/graphql",
     expressMiddleware(server, {
@@ -54,10 +55,17 @@ const startApolloServer = async () => {
 
   if (process.env.NODE_ENV === "production") {
     console.log(`In production mode, from NODE_ENV: ${process.env.NODE_ENV}`);
-    app.use(express.static(path.join(__dirname, "../../client/dist")));
+    // app.use(express.static(path.join(__dirname, "../../client/dist")));
 
+    // app.get("*", (_req: Request, res: Response) => {
+    //   res.sendFile(path.resolve(process.cwd(), "../../client/dist/index.html"));
+    // });
+
+    const clientBuildPath = path.join(process.cwd(), "client", "dist");
+
+    app.use(express.static(clientBuildPath));
     app.get("*", (_req: Request, res: Response) => {
-      res.sendFile(path.resolve(process.cwd(), "../../client/dist/index.html"));
+      res.sendFile(path.join(clientBuildPath, "index.html"));
     });
   }
 
