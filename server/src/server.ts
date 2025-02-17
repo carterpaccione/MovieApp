@@ -31,6 +31,7 @@ const startApolloServer = async () => {
 
   app.use((req, _res, next) => {
     console.log("Request received: ", req.method, req.url);
+    console.log("Test dirname: ", __dirname);
     next();
   });
 
