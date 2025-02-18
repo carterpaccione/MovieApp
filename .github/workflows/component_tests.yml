@@ -1,4 +1,4 @@
-name: Checking Tests
+name: Component Tests
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Checking Tests
+    name: Component Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 21.x
 
-      - name: Installl dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: Run Component Tests

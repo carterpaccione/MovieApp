@@ -121,6 +121,7 @@ const UserProfile = () => {
         <Button
           className="button"
           id="add-friend-button"
+          title="Add Friend"
           onClick={handleAddButton}
         >
           <svg
@@ -143,6 +144,7 @@ const UserProfile = () => {
         <Button
           className="button"
           id="remove-request-button"
+          title="Cancel Friend Request"
           onClick={handleDeleteRequestButton}
         >
           <svg
@@ -164,6 +166,7 @@ const UserProfile = () => {
           <Button
             className="button"
             id="accept-friend-button"
+            title="Accept Friend Request"
             onClick={handleAcceptButton}
           >
             <svg
@@ -179,6 +182,7 @@ const UserProfile = () => {
           <Button
             className="button"
             id="reject-friend-button"
+            title="Reject Friend Request"
             onClick={handleRejectButton}
           >
             <svg
@@ -198,6 +202,7 @@ const UserProfile = () => {
       <Button
         className="button"
         id="remove-friend-button"
+        title="Remove Friend"
         onClick={handleRemoveButton}
       >
         <svg

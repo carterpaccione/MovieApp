@@ -16,7 +16,8 @@
     "render-build": "npm install --include=dev && npm run build",
     "cypress": "npx cypress open",
     "test": "npx cypress run --browser electron --headless",
-    "test-component": "npx cypress run -- component",
+    "test-component": "npx cypress run --component",
+    "test-e2e": "concurrently \"npm run start:dev\" \"wait-on tcp:3001 && cypress run --e2e\"",
     "test-gui": "npx cypress open --detached"
   },
   "author": "",
