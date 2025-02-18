@@ -66,7 +66,7 @@ movieSchema.methods.calculateAverageRating = function () {
   console.log("Average rating: ", averageRating);
   this.averageRating = averageRating.toFixed(1);
   console.log("This.averageRating: ", this.averageRating);
-  return averageRating;
+  return averageRating.toFixed(1);
 };
 
 movieSchema.pre("save", function (next) {
