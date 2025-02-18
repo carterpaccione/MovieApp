@@ -35,18 +35,6 @@
     padding: 0.5rem;
 }
 
-.ratingCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 1rem;
-    padding: 1rem;
-    background-color: var(--color-neutral-two);
-    border-radius: 0.5rem;
-}
-
-.ratingCard a {
-    cursor: pointer;
-    text-decoration: none;
+#review-container {
+    margin-bottom: 1rem;
 }
