@@ -335,7 +335,7 @@ const Movie = () => {
           </Col>
         </Row>
       </Container>
-      <Container fluid>
+      <Container fluid id="review-container">
           {dbMovie?.movie.ratings &&
             dbMovie.movie.ratings.map((rating: IRating) =>
               rating.review && rating.review.length > 0 ? (
