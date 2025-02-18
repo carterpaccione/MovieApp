@@ -64,7 +64,7 @@ movieSchema.methods.calculateAverageRating = function () {
     validScores.reduce((a: number, b: number) => a + b, 0) / validScores.length;
 
   console.log("Average rating: ", averageRating);
-  this.averageRating = averageRating;
+  this.averageRating = averageRating.toFixed(1);
   console.log("This.averageRating: ", this.averageRating);
   return averageRating;
 };
