@@ -12,10 +12,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Test
+      - name: Component Tests
         run: |
           npm install
           npm run test-component
+          
+      - name: E2E Tests
+        run: |
+          npm install
+          npm run test-e2e
 
       - name: Deploy
         if: github.ref == 'refs/heads/main'
