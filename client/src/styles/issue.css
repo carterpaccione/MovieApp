@@ -1,0 +1,29 @@
+.issue-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.issue-form {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-control {
+    margin-bottom: 1rem;
+}
+
+#issue-description {
+    width: 100%;
+    min-height: 16rem;
+    max-height: max-content;
+}
+
+#issue-form-submit-button {
+    width: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}

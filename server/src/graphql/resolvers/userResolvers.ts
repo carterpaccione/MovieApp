@@ -43,7 +43,10 @@ export const UserResolvers = {
             path: "movies",
             select: "movie status rating _id",
             populate: [
-              { path: "movie", select: "title imdbID poster _id averageRating" },
+              {
+                path: "movie",
+                select: "title imdbID poster _id averageRating",
+              },
               { path: "rating", select: "score review _id" },
             ],
           },
@@ -54,7 +57,7 @@ export const UserResolvers = {
           {
             path: "recommendedMovies",
             select: "Title Year imdbID Type Poster",
-          }
+          },
         ]);
         console.log("user:", user);
         return user;
@@ -193,9 +196,14 @@ export const UserResolvers = {
         throw new Error("Could not fetch user recommendations.");
       }
     },
-    searchUsers: async(_parent: any, { query }: { query: string }) => {
+    searchUsers: async (_parent: any, { query }: { query: string }) => {
+      if (query.length < 3) {
+        return [];
+      }
       try {
-        const users = await User.find({ username: { $regex: query, $options: "i" } });
+        const users = await User.find({
+          username: { $regex: query, $options: "i" },
+        });
         return users;
       } catch (error) {
         console.error("Error searching users:", error);
@@ -215,9 +223,12 @@ export const UserResolvers = {
       }
     },
     login: async (_parent: any, { input }: LoginUserInput) => {
+      if (!input.username || !input.password) {
+        throw new Error("Please fill out all fields.");
+      }
       const user = await User.findOne({ username: input.username });
       if (!user) {
-        throw new Error("Incorrect username.");
+        throw new Error("No user found with that username.");
       }
 
       const correctPw = await user.isCorrectPassword(input.password);

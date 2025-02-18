@@ -60,7 +60,7 @@ const Header = () => {
               setQuery(e.target.value);
             }}
           />
-          <Button className="button" id="search-button" type="submit">
+          <Button className="button" id="search-button" type="submit" title="Search">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
