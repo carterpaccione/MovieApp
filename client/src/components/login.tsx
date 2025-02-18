@@ -16,6 +16,8 @@ const Login = () => {
     password: "",
   });
 
+  const [error, setError] = useState("");
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginForm({
       ...loginForm,
@@ -30,6 +32,7 @@ const Login = () => {
       AuthService.login(data.login.token, { ...data.login.user });
     } catch (error: any) {
       console.error(error.message);
+      setError(error.message);
     }
   };
 
@@ -56,6 +59,8 @@ const Login = () => {
           onChange={handleInputChange}
         />
       </Form.Group>
+
+      {error && <p>{error}</p>}
 
       <Button className="button" id="home-form-submit-button" type="submit" title="Submit">
         <svg

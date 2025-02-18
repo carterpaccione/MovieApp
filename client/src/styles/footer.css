@@ -1,0 +1,14 @@
+#footer-container {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    text-align: right;
+    padding: 10px;
+}
+
+#footer-container .button {
+    height: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}

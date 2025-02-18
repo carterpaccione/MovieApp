@@ -3,6 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
 
 import Header from './components/header.js';
+import Footer from './components/footer.js';
 import './styles/main.css';
 
 const httpLink = createHttpLink({
@@ -29,6 +30,7 @@ function App() {
         <ApolloProvider client={client}>
             <Header></Header>
             <Outlet />
+            <Footer></Footer>
         </ApolloProvider>
     )
 }
