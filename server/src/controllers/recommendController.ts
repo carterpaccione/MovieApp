@@ -25,6 +25,8 @@ const parser = StructuredOutputParser.fromNamesAndDescriptions({
 
 const formatInstructions = parser.getFormatInstructions();
 
+// Defines the prompt template for the recommendation task. The template includes instructions for the user and the expected JSON schema for the response.
+// The formatting doesn't work as expected. So we have the parseResponse function to extract the JSON object from the response.
 const promptTemplate = new PromptTemplate({
   template: `You are an expert movie recommender. A user has a list of seen movies along with ratings.
     Based on the their ratings, recommend 3 movies you think they will likely enjoy not including anything from the user's seen list itself.

@@ -48,6 +48,9 @@ const Discover = () => {
   const [recommendations, setRecommendations] = useState<MovieSearch[]>([]);
 
   const getRecommendations = async (userMovies: SeenMovie[]) => {
+    /* Fetches recommendations using OpenAI API in the backend. By including the user's userMovies, it generates recommendations.
+      If the response comes back ok, the data is parsed into legible JSON. Then searches for each individual recommendation with the
+      OMDB API in our backend to save the data from that to the user's recommendations. */
     if (userMovies.length === 0) {
       return;
     }

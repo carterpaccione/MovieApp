@@ -132,12 +132,14 @@ const Movie = () => {
   };
 
   useEffect(() => {
+    /* Fetch the movie data from the OMDB API */
     if (idParams.id) {
       fetchMovieByID(idParams.id).then((data) => setPageMovie(data));
     }
   }, [idParams.id]);
 
   useEffect(() => {
+    /* Update the button state based on the user's movie data */
     const updateButtonState = () => {
       if (
         !userMovieData ||
@@ -284,6 +286,7 @@ const Movie = () => {
       }
     };
     updateButtonState();
+    /* Set the review form props based on the user's movie data */
     if (userMovieData) {
       setReviewFormProps({
         movieID: dbMovie?.movie._id || "",

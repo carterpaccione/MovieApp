@@ -24,6 +24,8 @@ const Header = () => {
   const apiURL = (import.meta as unknown as ImportMeta).env.VITE_API_BASE_URL;
 
   const handleSearch = async (query: string) => {
+    /*handleSearch() takes in the user's search query, ie: Harry Potter and turns it into Harry+Potter for the OMDB API.
+    It then fetches the data using our backend. If the response comes back ok, the user is redirected to the discover page with the data retrieved.*/
     const mutatedQuery = query.split(" ").join("+");
     try {
       const response = await fetch(

@@ -112,6 +112,7 @@ const UserProfile = () => {
   };
 
   const checkFriendshipStatus = () => {
+    /* Checks the friendship status between the user and the profile owner. Updates the button accordingly. */
     if (
       !friendshipStatus ||
       !friendshipStatus.friendshipStatus ||
