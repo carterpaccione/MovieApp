@@ -2,7 +2,7 @@ import MovieFixture from "../fixtures/movie.json";
 import UserContext from "../fixtures/userContext.json";
 
 describe("Movie Page API Calls", () => {
-  it("Pings the server", () => {
+  it("pings the server", () => {
     cy.request("http://localhost:3000").then((response) => {
       console.log("Response Received: ", response.status);
     });
@@ -80,7 +80,7 @@ describe("Movie Page API Calls", () => {
       cy.get("h2").should("have.text", MovieFixture.pageMovie.Title);
     });
 
-    it("Mark Seen Button saves the movie to the database and marks the userMovie status as SEEN", () => {
+    it("saves the movie to the database and marks the userMovie status as SEEN", () => {
       cy.get(`button[id="mark-seen-button"]`).should("be.visible").click();
       cy.wait("@markSeenCalls").then((interception) => {
         expect(interception.response?.statusCode).to.eq(200);
@@ -162,7 +162,7 @@ describe("Movie Page API Calls", () => {
       cy.get("h2").should("have.text", MovieFixture.pageMovie.Title);
     });
 
-    it("Mark WatchList Button saves the movie to the database and marks the userMovie status as WATCHLIST", () => {
+    it("saves the movie to the database and marks the userMovie status as WATCHLIST", () => {
       cy.get(`button[id="mark-watchlist-button"]`).should("be.visible").click();
       cy.wait("@markWatchListCalls").then((interception) => {
         expect(interception.response?.statusCode).to.eq(200);

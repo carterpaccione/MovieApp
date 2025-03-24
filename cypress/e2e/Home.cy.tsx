@@ -1,7 +1,7 @@
 import User from '../fixtures/users.json';
 
 describe ("Home Page functionality", () => {
-    it("Pings the server", () => { 
+    it("pings the server", () => { 
         cy.request("http://localhost:3000").then((response) => {
             console.log("Response Received: ", response.status);
         });
@@ -47,7 +47,7 @@ describe ("Home Page functionality", () => {
             cy.visit("http://localhost:3000/")
         });
 
-        it("Shows the correct sign up error messages", () => {
+        it("shows the correct sign up error messages", () => {
             cy.get(`button[id="signup-button"]`).should("be.visible").click();
             cy.get("#cypress-signup-email").type("test");
             cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();
@@ -66,7 +66,7 @@ describe ("Home Page functionality", () => {
             cy.get("#errorMessage").should("have.text", "Passwords do not match")
         });
 
-        it("Signs up a user", () => {
+        it("signs up a user", () => {
             cy.get(`button[id="signup-button"]`).should("be.visible").click();
             cy.get("#cypress-signup-email").type(User.email);
             cy.get("#cypress-signup-username").type(User.username);
@@ -76,7 +76,7 @@ describe ("Home Page functionality", () => {
             cy.location("pathname").should("eq", "/discover")
         });
 
-        it("Logs in a user", () => {
+        it("logs in a user", () => {
             cy.get("#cypress-login-username").type(User.username);
             cy.get("#cypress-login-password").type(User.password);
             cy.get(`button[id="home-form-submit-button"]`).should("be.visible").click();

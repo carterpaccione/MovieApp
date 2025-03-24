@@ -8,4 +8,5 @@ export const SAVE_MOVIE_TO_DB = gql`
             title
             poster
         }
-    }`;
+    }
+`;

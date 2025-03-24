@@ -50,7 +50,7 @@ const Header = () => {
   return (
     <Navbar>
       <Container>
-        <h1>Movie App</h1>
+        <h1>FilmSync</h1>
         <Form id="search-container" onSubmit={handleFormSubmit}>
           <Form.Control
             id="search-bar"
