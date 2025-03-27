@@ -17,7 +17,7 @@ describe("<Header />", () => {
         <Header />
       </MemoryRouter>
     );
-    cy.get("h1").should("have.text", "Movie App");
+    cy.get("h1").should("have.text", "FilmSync");
     cy.get("form").should("have.id", "search-container")
     .children("input")
     .should("have.attr", "placeholder", "Search for a movie...");

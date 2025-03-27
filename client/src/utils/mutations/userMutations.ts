@@ -35,8 +35,6 @@ export const ADD_TO_SEEN = gql`
       movies {
         movie {
           _id
-          title
-          imdbID
         }
         status
       }
@@ -53,8 +51,6 @@ export const ADD_TO_WATCHLIST = gql`
       movies {
         movie {
           _id
-          title
-          imdbID
         }
         status
       }
@@ -71,8 +67,6 @@ export const REMOVE_FROM_USER = gql`
       movies {
         movie {
           _id
-          title
-          imdbID
         }
         status
       }
@@ -86,14 +80,6 @@ export const SET_RECOMMENDATIONS = gql`
       _id
       username
       email
-      movies {
-        movie {
-          _id
-          title
-          imdbID
-        }
-        status
-      }
       recommendedMovies {
         imdbID
         Title

@@ -38,7 +38,7 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: context.user._id }).populate([
+        const user = await User.findOne({ _id: context.user._id }).select('-password').populate([
           {
             path: "movies",
             select: "movie status rating _id",
@@ -75,7 +75,7 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: userID }).populate([
+        const user = await User.findOne({ _id: userID }).select('-password').populate([
           {
             path: "movies",
             select: "movie status rating _id",
@@ -110,7 +110,8 @@ export const UserResolvers = {
         const userData = await User.findOne({
           _id: context.user._id,
           movies: { $elemMatch: { movie: movieID } },
-        }).populate([
+        }).select('-password')
+        .populate([
           {
             path: "movies",
             select: "movie status rating _id",
@@ -145,7 +146,7 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: context.user._id }).populate([
+        const user = await User.findOne({ _id: context.user._id }).select('-password').populate([
           {
             path: "movies",
             match: { status: "SEEN" },
@@ -165,7 +166,6 @@ export const UserResolvers = {
         if (!user) {
           throw new Error("User not found.");
         }
-        console.log("userListData:", user);
         return user;
       } catch (error) {
         console.error("Error fetching user:", error);
@@ -181,7 +181,7 @@ export const UserResolvers = {
         throw new AuthenticationError("Not logged in.");
       }
       try {
-        const user = await User.findOne({ _id: context.user._id }).populate([
+        const user = await User.findOne({ _id: context.user._id }).select('-password').populate([
           {
             path: "recommendedMovies",
             select: "Title Year imdbID Type Poster",
@@ -203,7 +203,8 @@ export const UserResolvers = {
       try {
         const users = await User.find({
           username: { $regex: query, $options: "i" },
-        });
+        }).select('-password');
+        console.log("USERS", users)
         return users;
       } catch (error) {
         console.error("Error searching users:", error);
@@ -315,6 +316,7 @@ export const UserResolvers = {
           },
           { runValidators: true, new: true }
         );
+        console.log("Updated User no check: ", updatedUser)
         return updatedUser;
       } catch (error) {
         console.error("Error adding movie to user:", error);

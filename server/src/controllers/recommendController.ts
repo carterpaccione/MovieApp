@@ -93,8 +93,6 @@ export const getRecommendations = async (
       const parsedResponse = await parseResponse(rawResponse.content);
       res.json({
         seenMovies: movies,
-        prompt: formattedPrompt,
-        response: rawResponse,
         parsedResponse: parsedResponse,
       });
     }
