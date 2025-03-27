@@ -1,0 +1,40 @@
+.movieContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 1rem;
+    padding: 1rem;
+}
+
+.movieTitle {
+    width: max-content;
+    font-weight: bold;
+}
+
+#moviePoster {
+    width: 25rem;
+    object-fit: cover;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.buttonContainer button {
+    width: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.movieContainer button {
+    margin: 1rem;
+    padding: 0.5rem;
+}
+
+#review-container {
+    margin-bottom: 1rem;
+}

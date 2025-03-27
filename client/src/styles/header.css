@@ -1,0 +1,36 @@
+#search-container {
+    display: flex;
+    align-items: center;
+}
+
+#search-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40rem;
+    margin: 1rem 0;
+    background-color: var(--color-secondary);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px;
+}
+
+#search-button {
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.nav-item {
+    margin: 0 1rem;
+    color: var(--color-secondary)
+}
+
+.nav-item:hover {
+    color: var(--color-grey-one);
+}
+
+.navbar {
+    background-color: black;
+    padding: 1.5rem;
+    width: 100%
+}

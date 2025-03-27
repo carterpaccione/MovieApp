@@ -1,0 +1,107 @@
+#profile-header .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#profile-header button {
+    margin: .5rem;
+    padding: .5rem;
+    width: max-content;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+#profile-header h2 {
+    width: max-content;
+    font-weight: bold;
+}
+
+#recommended-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+}
+
+#friends-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    height: max-content;
+    margin: 1rem;
+    padding: 1rem;
+    background-color: var(--color-grey-two);
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.friend-card {
+    width: max-content;
+    height: max-content;
+    background-color: var(--color-secondary);
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    margin: .5rem;
+}
+
+.friend-card:hover {
+    cursor: pointer;
+    background-color: var(--color-grey-one);
+    color: var(--color-text-two);
+}
+
+/* Movie Table */
+
+.accordion {
+    width: 40rem;
+    margin: 1rem;
+    padding: 1rem;
+    background-color: var(--color-grey-two);
+    border: 1px solid var(--color-secondary);
+    border-radius: 5px;
+}
+
+.accordidon-header {
+    background-color: var(--color-grey-one);
+}
+
+.accordion table th {
+    background-color: var(--color-grey-one);
+    text-align: center;
+}
+
+.table-image {
+    width: 5rem;
+    object-fit: cover;
+}
+
+.table-image:hover {
+    cursor: pointer;
+}
+
+.reviewContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-secondary);
+}
+
+.reviewContainer img {
+    width: 10rem;
+    object-fit: cover;
+}
+
+.reviewContainer img:hover {
+    cursor: pointer;
+}
+
+td {
+    text-align: center;
+}

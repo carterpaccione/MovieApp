@@ -1,0 +1,16 @@
+#form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+#home-form-sumbit-button {
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    width: max-content;
+    cursor: pointer;
+    margin: 1rem;
+}
