@@ -1,8 +1,20 @@
-# <center>Movie App   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)</center>
+# <center>FilmSync   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)</center>
 
 ## Description
 
-Movie App allows users to search for movies using the OMDb API, mark movies as seen, rate and review movies, and save them to a "Watch List" for later viewing. Users can also get add friends to view their movie catalog and reviews. The app also generates personalized movie recommendations based on the user's own ratings, excluding movies they've marked as seen. Additionally, the "Top 5 Movies" section deisplays the highest-rated movies on the site.
+FilmSync allows users to search for movies using the OMDb API, mark movies as seen, rate and review movies, and save them to a "Watch List" for later viewing. Users can also get add friends to view their movie catalog and reviews. The app also generates personalized movie recommendations based on the user's own ratings, excluding movies they've marked as seen. Additionally, the "Top 5 Movies" section deisplays the highest-rated movies on the site.
+
+## Screenshots
+
+<a href="https://drive.google.com/uc?export=view&id=1xa6zjBbwx5UOzqJTZuW7KjY-su--DDPX"><img src="https://drive.google.com/uc?export=view&id=1xa6zjBbwx5UOzqJTZuW7KjY-su--DDPX" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" alt="Discover Page" />
+
+<a href="https://drive.google.com/uc?export=view&id=1FyEPO7oRdsee7Lq4e3mFZvlaWsByaGwl"><img src="https://drive.google.com/uc?export=view&id=1FyEPO7oRdsee7Lq4e3mFZvlaWsByaGwl" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" alt="Movie Search" />
+
+<a href="https://drive.google.com/uc?export=view&id=1HI7lmudNPD0TlCESifejjdoYhOI115R-"><img src="https://drive.google.com/uc?export=view&id=1HI7lmudNPD0TlCESifejjdoYhOI115R-" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" alt="Movie Page" />
+
+<a href="https://drive.google.com/uc?export=view&id=1y8n_WE36M58ZixQGCEQrx9avGH8RNr1E"><img src="https://drive.google.com/uc?export=view&id=1y8n_WE36M58ZixQGCEQrx9avGH8RNr1E" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" alt="Review" />
+
+<a href="https://drive.google.com/uc?export=view&id=1xcJYlUJyHmxBYbILKBKF2Rwgl3Wz8tmP"><img src="https://drive.google.com/uc?export=view&id=1xcJYlUJyHmxBYbILKBKF2Rwgl3Wz8tmP" style="width: 650px; max-width: 100%; height: auto" title="Click to enlarge picture" alt="Profile Page" />
 
 ## Table of Contents
 
@@ -22,7 +34,6 @@ Movie App allows users to search for movies using the OMDb API, mark movies as s
   - Set necessary environment variables, npm install, npm run start.
 - Deployed Application:
     - TBD
-
 ## Features
 
 - User Authentication:
@@ -1423,7 +1434,9 @@ GitHub: github.com/carterpaccione
 
 ## Future Improvements
 
-
+- UI updates
+- Paganization for OMDb API search queries
+- TV Show / Episode types
 
 ## License
 
